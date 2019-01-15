@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>11路由_基本用法</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<script src="lib/vue.js"></script>
+	<script src="lib/vue-router.js"></script>
+</head>
+<body>
+	<h1>11路由_基本用法</h1>
+	<div id="app" class="container">
+		<nav class="nav nav-tabs">
+		  <router-link class="nav-link" :to="tab.link" active-class="active" exact-active-class="active" v-for="(tab,idx) in tabs">{{tab.text}}</a>
+		</nav>
+		<div class="p-5 border">
+			<router-view></router-view>
+		</div>
+	</div>
+	<script>
+		/*
+			11路由_基本用法
+				
+		 */
+		
+		// 定义路由组件
+		const Home = {
+			template:'<h4>我的首页</h4>'
+		}
+		const Hot = {
+			template:'<h4>热点新闻</h4>'
+		}
+		const Find = {
+			template:'<h4>发现</h4>'
+		}
+
+		const AboutMe = {
+			template:'<h4>设置</h4>'
+		}
+
+		const User = {
+			template:`<div>
+				<h4>用户管理界面</h4>
+				<router-link to="/user/settings" >settings</router-link>
+				<router-link to="/user/password" >change password</router-link>
+				<router-view></router-view>
+			</div>`
+
+		}
+
+		// 定义路由
+		const routes = [
+			{
+				path:'/',
+				component:Home
+			},
+			{
+				path:'/hot',
+				component:Hot
+			},
+			{
+				path:'/find',
+				component:Find
+			},
+			{
+				path:'/aboutme',
+				component:AboutMe
+			},
+			{
+				path:'/user',
+				component:User,
+				children:[
+					{
+						path:'',
+						component:{
+							template:`
+								<div>
+									用户管理界面
+								</div>
+							`
+						}
+					},
+					{
+						path:'settings',
+						component:{
+							template:`<p>用户设置</p>`
+						}
+					},
+					{
+						path:'password',
+						component:{
+							template:`<p>密码修改</p>`
+						}
+					}
+				]
+			}
+		];
+
+		// 创建路由实例
+		let router = new VueRouter({
+			routes
+		});
+		
+
+		// 创建和挂载根实例
+		let vm = new Vue({
+			el:'#app',
+			data:{
+				tabs:[
+					{text:'首页',link:'/'},
+					{text:'热点',link:'/hot'},
+					{text:'发现',link:'/find'},
+					{text:'我的',link:'/aboutme'},
+					{text:'用户（嵌套路由）',link:'/user'},
+				],
+				active:0
+			},
+			methods:{
+				
+			},
+
+			// 配置路由选项，注入路由
+			router
+		})
+		
+
+		
+	</script>
+</body>
+</html>

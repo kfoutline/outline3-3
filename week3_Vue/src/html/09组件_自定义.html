@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>09组件_自定义</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<script src="lib/vue.js"></script>
+</head>
+<body>
+
+	<div id="app">
+		<mystep :current-step="idx">
+			<step-item></step-item>
+			<step-item></step-item>
+			<step-item></step-item>
+			<step-item></step-item>
+		</mystep>
+	</div>
+	<script>
+		/*
+			09组件_自定义
+			
+		 */
+		
+		
+		Vue.component('mystep',{
+			props:['currentStep'],
+			template:`
+				<div>
+					mystep:{{currentStep}}
+					<slot></slot>
+				</div>
+			`,
+			mounted(){
+				console.log(this.currentStep);
+				console.log(this.$children);
+			}
+		});
+
+
+		Vue.component('step-item',{
+			template:`<a>test - {{current}}</a>`,
+			data(){
+				return {
+					// current:this.$parent.currentStep
+				}
+			},
+			computed:{
+				current(){
+					return this.$parent.currentStep
+				}
+			}
+		})
+
+		
+		let vm = new Vue({
+		  el: '#app',
+		  data: {
+		  		idx:2
+		  },
+			// components:{
+			// 	'step-item':{
+			// 		template:`<a>test</a>`
+			// 	}
+			// }
+		
+		});
+		
+	</script>
+</body>
+</html>

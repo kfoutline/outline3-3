@@ -1,0 +1,14 @@
+{
+  "pages":[
+    
+    "pages/index/index",
+    "pages/search/search",
+    "pages/detail/detail",
+    "pages/list/list"
+   
+  ],
+  "window":{
+    "navigationBarTitleText":"百度音乐",
+    "navigationBarBackgroundColor":"#f00"
+  }
+}

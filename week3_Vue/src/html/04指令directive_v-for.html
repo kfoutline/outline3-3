@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>04指令directive_v-for</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<script src="lib/vue.js"></script>
+</head>
+<body>
+	<h1>04指令directive_v-for</h1>
+	<div id="app">
+		<ul id="v-for-object" class="demo">
+		  <li v-for="(val,key,idx) of info">
+		    {{ val }}-{{ key }}-{{ idx }}
+		  </li>
+		</ul>
+	</div>
+	<script>
+		/*
+			04指令directive_v-for
+				* v-for
+		 */
+		
+		let vm = new Vue({
+		  el: '#app',
+		  data: {
+		    info: {
+		      firstName: 'laoxie',
+		      lastName: 'xie',
+		      age: 30
+		    }
+		  }
+		});
+		
+	</script>
+</body>
+</html>

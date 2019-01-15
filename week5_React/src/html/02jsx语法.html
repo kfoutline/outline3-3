@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>02jsx语法</title>
+</head>
+
+<body>
+    <h1>02jsx语法</h1>
+    <div id="root"></div>
+    <script src="lib/react.development.js"></script>
+	<script src="lib/react-dom.development.js"></script>
+	<script src="lib/babel.min.js"></script>
+    <script type="text/babel">
+        //使用变量：{}
+        let myName = 'laoxie';
+        let fontStyle = {color:'#58bc58'}
+
+        //数组中的元素需要有唯一的key
+        let arr = [<h4 key="t1">titel</h4>,<h4 key="t2">tite2</h4>,<h4 key="t3">tite3</h4>];
+
+        let list = (
+            <div style={{'backgroundColor':'#f00'}}>
+                <ul>
+                  <li>{myName}</li>
+                  {
+                    //样式必须使用此种方式设置
+                    }
+                  <li style={fontStyle}>list item</li>
+                  <li>{arr}</li>
+                </ul>
+                <strong>abc</strong>
+            </div>
+        );
+
+        ReactDOM.render(
+        	list, 
+        	document.getElementById('root')
+         );
+    </script>
+</body>
+
+</html>

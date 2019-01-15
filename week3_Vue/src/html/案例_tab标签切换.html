@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>案例_tab标签切换</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<style>
+		.collapse{display: block;}
+	</style>
+	<script src="lib/vue.js"></script>
+	
+</head>
+<body>
+	<div id="app" class="container-fluid">
+		<h1>tab标签切换</h1>
+		<div class="tabs">
+			<ul class="nav nav-tabs">
+			  <li class="nav-item" v-for="(item,idx) in items">
+			    <a class="nav-link" href="#" :class="{active:current===idx}" @click="change(idx)">{{item}}</a>
+			  </li>
+			</ul>
+			<div class="collapse">
+			  <div class="card card-body" v-for="(con,idx) of contents" v-show="current===idx">
+			    {{con}}
+			  </div>
+			</div>
+		</div>
+	</div>
+	<script>
+		/*
+			案例_tab标签切换
+		 */
+		let vm = new Vue({
+			el:'#app',
+			data:{
+				items:[
+					'laoxie','lemon','tiantian'
+				],
+				contents:['laoxie 最爱写代码','lemon最爱唱儿歌','tiantian最爱大保健'],
+				current:0
+			},
+			methods:{
+				change(idx){
+					this.current = idx;
+				}
+			},
+			computed:{
+				
+			}
+		})
+		
+	</script>
+</body>
+</html>

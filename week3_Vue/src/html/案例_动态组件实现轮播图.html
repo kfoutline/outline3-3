@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>案例_动态组件实现轮播图</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+</head>
+<body>
+	<h1>案例_动态组件实现轮播图</h1>
+	<div id="app" class="app">
+     	<carousel :imgs="imgs"></carousel>
+   </div>
+
+	<template id="carousel">
+		<div>
+			<component :is="activeComponent"></component><br/>
+			<div class="btn-group">
+				<button class="btn btn-outline-dark" v-for="(url,idx) in imgs" @click="change(idx)">{{idx+1}}</button>
+			</div>
+			</div>
+	</template>
+	<script src="lib/vue.js"></script>
+	<script>
+		/*
+			案例_动态组件实现轮播图
+				
+		 */
+		
+		let subComponent = {};
+		let imgs = ['img/mv1.jpg','img/mv2.jpg','img/mv3.jpg','img/mv4.jpg','img/mv5.jpg'];
+		imgs.forEach((url,idx)=>{
+			subComponent['img'+idx] = {
+				template:`<img src="${url}"/>`
+			}
+		});
+    	
+    	let vm = new Vue({
+    		el:'.app',
+    		data:{
+    			msg:'hello laoxie',
+    			imgs:imgs
+    		},
+    		components:{
+    			carousel:{
+    				props:['imgs'],
+    				data(){
+    					return {
+    						activeComponent:'img0'
+    					}
+    				},
+    				template:'#carousel',
+    				created(){console.log(this)
+    					
+	    				
+	    			},
+	    			components:subComponent,
+		    		methods:{
+		    			change(idx){
+		    				this.activeComponent = 'img'+idx;
+		    			}
+		    		}
+
+    			}
+    			
+    		}
+    	})
+		
+	</script>
+</body>
+</html>

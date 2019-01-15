@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>03组件_setProps</title>
+</head>
+
+<body>
+    <h1>03组件_setProps</h1>
+    <div id="app"></div>
+    <script src="lib/react.development.js"></script>
+	<script src="lib/react-dom.development.js"></script>
+	<script src="lib/babel.min.js"></script>
+    <script type="text/babel">
+
+       class Hello extends React.Component{
+
+            constructor(props){
+                super(props);window.tta = this;
+                this.state = {value:'hello laoxie'}
+                this.handleClick = this.handleClick.bind(this);
+                this.handlChange = this.handlChange.bind(this);
+            }
+
+            handleClick(e){
+
+                this.setState({value:this.state.value.split('').reverse().join('')})
+            }
+
+            handlChange(e){
+
+                this.setState({value:e.target.value})
+            }
+
+            render(){
+                return <div>
+                    <input type="text" value={this.state.value} onChange={this.handlChange} />
+                    <h4>{this.state.value}</h4>
+                    <button onClick={this.handleClick}>改变</button>
+                </div>
+            }
+       }
+
+
+       ReactDOM.render(
+            <Hello/>,
+            document.querySelector('#app')
+       )
+    </script>
+</body>
+
+</html>

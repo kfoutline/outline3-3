@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>11路由_动态路由</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<script src="lib/vue.js"></script>
+	<script src="lib/vue-router.js"></script>
+</head>
+<body>
+	<h1>11路由_动态路由</h1>
+	<div id="app" class="container">
+		<nav class="nav nav-tabs">
+		  <router-link class="nav-link" href="#" :to="tab.link" :class="{active:active==idx}" v-for="(tab,idx) in tabs" @click.native="setActive(idx)">{{tab.text}}</a>
+		</nav>
+		<div class="p-5 border">
+			<router-view></router-view>
+		</div>
+	</div>
+	<script>
+		/*
+			11路由_动态路由
+				* 根据路径的变化动态改变视图
+				* 动态路由的变量会自动传入$route.params
+		 */
+		
+		// 定义路由组件
+		const Home = {
+			template:'<h4>我的首页</h4>'
+		}
+		const Hot = {
+			template:'<h4>热点新闻</h4>'
+		}
+		const Find = {
+			template:'<h4>发现</h4>'
+		}
+
+		const AboutMe = {
+			template:'<h4>设置</h4>'
+		}
+		const User = {
+			template:`<h4>请在地址栏后面添加用户名，如：/user/laoxie</4>`
+		}
+		const UserDetails = {
+			template:`<div>hello {{$route.params.username}}</div>`
+		}
+		
+		// 配置路由
+		const routes = [
+			{
+				path:'\/',
+				component:Home
+			},
+			{
+				path:'/hot',
+				component:Hot
+			},
+			{
+				path:'/find',
+				component:Find
+			},
+			{
+				path:'/aboutme',
+				component:AboutMe
+			},
+			{
+				path:'/user',
+				component:User
+			},
+			{
+				path:'/user/:username',
+				component:UserDetails
+			}
+		];
+
+		// 创建路由实例
+		let router = new VueRouter({
+			routes
+		});
+		
+
+		// 创建和挂载根实例
+		let vm = new Vue({
+			el:'#app',
+			data:{
+				tabs:[
+					{text:'首页',link:'/'},
+					{text:'热点',link:'/hot'},
+					{text:'发现',link:'/find'},
+					{text:'我的',link:'/aboutme'},
+					{text:'用户（动态路由）',link:'/user'},
+				],
+				active:0
+			},
+			methods:{
+				setActive(idx){console.log(111)
+					this.active = idx;
+				}
+			},
+
+			// 配置路由选项，注入路由
+			router
+		})
+		
+
+		
+	</script>
+</body>
+</html>

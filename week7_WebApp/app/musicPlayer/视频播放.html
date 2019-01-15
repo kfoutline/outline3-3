@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>视频播放</title>
+</head>
+<body>
+	<!-- 
+		标签属性：
+			* width/height: 视频宽高
+			* poster: 带有预览图（海报图片）的视频播放器
+			* controls: 向用户显示控件，比如播放按钮
+			* autoplay: 视频在就绪后马上播放
+			* loop: 播放完成后重复播放
+			* preload：视频在页面加载时进行加载，并预备播放
+			* src: 要播放的视频的 URL
+	 -->
+	<h4>默认</h4>
+	<video src="media/七喜广告2_baofeng.mp4" controls>您的浏览器不支持html播放器，请升级您的浏览器</video>
+
+	<h4>利用source实现兼容性</h4>
+	<video controls poster="../img/g010.jpg">
+		<source src="media/3theA.mp4" type="video/mp4">
+		<source src="media/3theA.ogg" type="video/ogg">
+		<source src="media/3theA.webm" type="video/webm">
+	</video>
+
+	<h4>网络视频</h4>
+	<video width="800" controls preload poster="http://i2.hdslb.com/video/bb/bbb5b780ddfa7f5fb8b02c57e5ee46fe.jpg">
+		<source src="http://wow.techbrood.com/uploads/141102/chrome_japan.mp4"/>
+		您的浏览器不支持html播放器，请升级您的浏览器
+	</video>
+</body>
+</html>

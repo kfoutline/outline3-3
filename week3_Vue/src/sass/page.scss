@@ -1,0 +1,10 @@
+@import 'var';
+
+.content{
+	font-size:$fontSize;
+	h2{
+		color:$mainColor;
+		margin:0;padding:10px;
+		border-bottom:5px solid #ddd;
+	}
+}

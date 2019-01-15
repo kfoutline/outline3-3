@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>06组件通讯（兄弟组件通信）</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+</head>
+<body>
+	<h1>06组件通讯（兄弟组件通信）</h1>
+	<div id="app" class="container">
+		<!-- <nav-a v-on:getdata="toB"></nav-a>
+		<br><br>
+		<nav-b :data="data"></nav-b> -->
+		<com-a></com-a>
+		<br><br>
+		<com-b></com-b>
+	</div>
+
+
+
+	<script src="lib/vue.js"></script>
+	<script>
+		/*
+			06组件通讯（兄弟组件通信）：组件就是一个Vue实例
+
+				* A -> 父 -> B
+				* 利用第三方实例实现数据传递
+					* 接收方：自定义事件
+						NavB
+					* 传输方：$emit()
+						* NavA
+				* VueX
+		 */
+		
+
+		//  A -> 父 -> B
+		// let vm = new Vue({
+		// 	el:'#app',
+		// 	data:{
+		// 		username:'laoxie',
+		// 		data:'',
+		// 	},
+
+		// 	components:{
+		// 		navA:{
+		// 			data(){
+		// 				return {
+		// 					name:'NavA',
+		// 					msg:'来自a的数据'
+		// 				}
+		// 			},
+		// 			template:`<div>
+		// 				<p>{{name}}</p>
+		// 				<button class="btn btn-success" @click="toComponentB">点击传递数据到navB</button>
+		// 			</div>`,
+
+		// 			methods:{
+		// 				toComponentB(){
+		// 					// 触发自自定义事件getdata
+		// 					this.$emit('getdata',this.msg);
+		// 				}
+		// 			}
+		// 		},
+		// 		navB:{
+		// 			data(){
+		// 				return {
+		// 					name:'NavB'
+		// 				}
+		// 			},
+		// 			props:['data'],
+		// 			template:`<div>
+		// 				<p>{{name}}</p>
+		// 				<h4>data:{{data}}</h4>
+		// 				<button class="btn btn-danger">点击传递数据到navA</button>
+		// 			</div>`
+		// 		}
+		// 	},
+
+		// 	methods:{
+		// 		toB(val){
+		// 			// val为接收组件a的数据
+		// 			this.data = val;
+		// 		}
+		// 	}
+			
+		// });
+
+		// 利用第三方实例作为桥梁实现传递
+		let bus = new Vue();
+
+	    //组件A
+	    let comA = {
+	        data(){
+	            return {
+	            msg:'I am A'
+	            }
+	        },
+	        template:`<div>
+	            <p>{{msg}}</p>
+	            <button @click="sendToB">传数据到B组件</button>
+	        </div>`,
+	        methods:{
+	            sendToB(){
+	                bus.$emit('toB',this.msg);
+	            }
+	        }
+	    }
+
+	    // 组件B
+	    let comB = {
+	        data:()=>({
+	            msg:'I am B'
+	        }),
+	        mounted(){
+	            bus.$on('toB',val=>{
+	                this.msg = val;
+	            })
+	        },
+	        template:`<div><p>{{this.msg}}</p></div>`
+	    }
+
+	    // 创建实例，并注册子组件
+	    new Vue({
+	        el:'#app',
+	        components:{
+	            comA,
+	            comB
+	        }
+	    });
+		
+	</script>
+</body>
+</html>

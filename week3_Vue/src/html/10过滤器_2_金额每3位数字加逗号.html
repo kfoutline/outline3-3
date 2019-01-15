@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>10过滤器</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<script src="lib/vue.js"></script>
+</head>
+<body>
+	<h1>10过滤器</h1>
+	<div id="app">
+		<p>{{price | price}}</p>
+		<p>{{salePrice | price}}</p>
+	</div>
+	<script>
+		/*
+			10过滤器
+				Vue会把值传入过滤器函数
+				* 类型
+					* 全局
+						Vue.filter(name,options)
+					* 局部
+						filters
+				* 使用:
+					* {{title | capitalize}}  等效于: capitalize(title)
+					* {{title | flt1 | flt2}}  等效于: flt2(flt1(title))
+		 */
+		
+		// 首字母大写
+		Vue.filter('price', function (value) {
+		  if (!value) return ''
+		  value = value.toString()
+		  return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		//   return value.replace(/(\d+?)(?=(?:\d{3})+$)/g,'$1,')
+		})
+
+		    
+		// 创建根实例
+		let vm = new Vue({
+		     el: '#app',
+		     data:{
+                 price:19986.00,
+                 salePrice:1500000
+		     }
+		   });
+
+		
+	</script>
+</body>
+</html>

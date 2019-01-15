@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>03组件_setProps</title>
+</head>
+
+<body>
+    <h1>03组件_setProps</h1>
+    <div id="app"></div>
+    <script src="lib/react.development.js"></script>
+	<script src="lib/react-dom.development.js"></script>
+	<script src="lib/babel.min.js"></script>
+    <script type="text/babel">
+
+        // ES6弃用：getDOMNode, replaceState, isMounted, setProps, replaceProps
+        class Person extends React.Component{
+            constructor(props) {
+                super(props);
+                this.state = {
+                    age:22,
+                    clickCount: 0
+                };
+                this.handleClick = this.handleClick.bind(this);console.log(this,props)
+            }
+
+            handleClick() {
+               this.setProps({
+                   myname:"laoxie",
+                   gender:'男'
+               })
+            }
+            render () {
+                return (<button onClick={this.handleClick}>点我修改组件属性</button>);
+            }
+        }
+
+        //新版本弃用React.createClass
+        //const Person = React.createClass({
+        //    handleClick() {
+        //       this.setProps({
+        //           myname:"laoxie",
+        //           gender:'男'
+        //       })
+        //    },
+        //    render(){
+        //        console.log(this,props);
+        //        return <button onClick={handleClick.bind(this)}>点我修改组件属性</button>
+        //        
+        //    }
+        //});
+
+        ReactDOM.render(
+            <Person myname="lemon" age="30" />,
+            document.getElementById('app')
+        );
+    </script>
+</body>
+
+</html>

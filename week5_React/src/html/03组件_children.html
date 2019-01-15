@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>03组件_children</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+</head>
+
+<body>
+    <h1>03组件_children</h1>
+    <div id="app"></div>
+    <script src="lib/react.development.js"></script>
+	<script src="lib/react-dom.development.js"></script>
+	<script src="lib/babel.min.js"></script>
+    <script type="text/babel">
+
+        /*
+            * children
+            * React.Children
+         */
+
+       class Button extends React.Component{
+            render(){
+                return <button>{this.props.myname}</button>
+            }
+
+        }
+
+        Button.propTypes = {
+            //自定义验证规则
+            myname:(props,propName,comName)=>{
+                console.log(props,propName,comName);
+
+                if(typeof props[propName] != 'string'){
+                    return new Error(propName + '必须为字符串');
+                }
+            }
+        }
+
+
+        class Box extends React.Component{
+            render(){
+                console.log('Child:',React.Children)
+                console.log(React.Children.map(this.props.children,(c)=>{return c.type}))
+                console.log('c:',this.props.children)
+                console.log(this.props)
+                return <div className="box">
+                    {this.props.children}
+                </div>
+            }
+
+        }
+
+
+
+        ReactDOM.render(
+            //<Button myname="laoxie" />,
+            <Box myname="laoxie">
+                <span>1</span>
+                <h4>2</h4>
+            </Box>,
+            document.querySelector('#app')
+       )
+
+    </script>
+</body>
+
+</html>

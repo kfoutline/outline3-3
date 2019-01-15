@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>index</title>
+	<link rel="stylesheet" href="./css/page.css">
+</head>
+<body>
+	<h1>index</h1>
+	<div class="container">
+		<div class="boxA">我是A</div>
+		<div class="boxB">我是B，点我</div>
+	</div>
+	<script src="./js/zepto.js"></script>
+	<script src="./js/touch.js"></script>
+	<script>
+		let boxA = document.querySelector('.boxA');
+		let boxB = document.querySelector('.boxB');
+		let container = document.querySelector('.container');
+
+		container.onclick = function(){
+			console.log('container click')
+		}
+
+		boxB.ontouchstart = function(e){
+			console.log('touchstart',Date.now());
+
+			this.style.display = 'none';
+
+			console.log(e)
+		}
+
+		boxB.ontouchend = function(){
+			console.log('touchend',Date.now());
+		}
+
+		boxB.onclick = function(){
+			console.log('clickB',Date.now())
+		}
+
+		boxA.onclick = function(e){
+			console.log('clickA',Date.now());
+			e.stopPropagation();
+		}
+
+		// $('.boxB').on('tap singleTap longTap',function(){
+		// 	console.log('tap B');
+		// 	this.style.display = 'none';
+		// });
+
+		// $('.boxB').on('swipeLeft',function(e){
+		// 	console.log('swipeLeft');
+
+		// 	e.preventDefault();
+		// });
+
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>案例_3_名片切换</title>
+    <style>
+		.card{margin-bottom:20px;border:5px solid #ccc;padding:20px;width:300px;overflow:hidden;}
+		.card img{float:left;margin-right:25px;width:100px;border:1px solid #ddd;padding:5px;background-color: #fff;}
+		.card .info{float:left}
+		.card h4{margin:0 0 10px;}
+		.card p{margin:5px 0;}
+	</style>
+</head>
+
+<body>
+    <h1>案例_3_名片切换</h1>
+    <div id="example"></div>
+    <div id="root"></div>
+    <div id="app"></div>
+    <script src="lib/react.development.js"></script>
+	<script src="lib/react-dom.development.js"></script>
+	<script src="lib/babel.min.js"></script>
+    <script type="text/babel">
+        
+
+        //不使用组件方式
+        // 不断调ReactDOM.render方法
+       let cards = [
+            {
+                name:'laoxie',
+                age:18,
+                gender:'男',
+                photo:'img/laoxie.jpg'
+            },
+             {
+                name:'lemon',
+                age:32,
+                gender:'女',
+                photo:'img/lemon.jpg'
+            },
+             {
+                name:'tiantian',
+                age:24,
+                gender:'男',
+                photo:'img/tiantian.jpg'
+            },
+             {
+                name:'wenjing',
+                age:24,
+                gender:'女',
+                photo:'img/wenjing.jpg'
+            },
+             {
+                name:'laoyao',
+                age:24,
+                gender:'男',
+                photo:'img/laoyao.jpg'
+            }
+       ]
+
+       let index = 0;
+
+       function nextHandle(){
+            index++;
+            if(index>=cards.length){
+                index=0;
+            }
+
+            render();
+        }
+
+        function render(){
+           ReactDOM.render(
+                <div>
+                    <button onClick={nextHandle}>下一张</button>
+                    <div className="card">
+                            <img src={cards[index].photo}/>
+                            <h4>{cards[index].name}</h4>
+                            <p>{cards[index].age}</p>
+                            <p>{cards[index].gender}</p>
+                        </div>
+                </div>,
+                document.querySelector('#example')
+           )
+            
+        }
+
+        render();
+
+
+        // 函数式组件
+        function Card(props){
+            let {data} = props;
+            return (
+                <div className="card">
+                    <img src={data.photo} />
+                    <div className="info">
+						<h4>姓名：{data.name}</h4>
+						<p>年龄：{data.age}</p>
+						<p>性别：{data.gender}</p>
+						<p>电话：<span>{data.tel}</span></p>
+					</div>
+                </div>
+            )
+        }
+
+
+        class ShowCard extends React.Component{
+            state = {
+                data:[
+                    {
+                        name:'laoxie',
+                        age:18,
+                        gender:'男',
+                        photo:'img/laoxie.jpg'
+                    },
+                    {
+                        name:'lemon',
+                        age:32,
+                        gender:'女',
+                        photo:'img/lemon.jpg'
+                    },
+                    {
+                        name:'tiantian',
+                        age:24,
+                        gender:'男',
+                        photo:'img/tiantian.jpg'
+                    },
+                    {
+                        name:'wenjing',
+                        age:24,
+                        gender:'女',
+                        photo:'img/wenjing.jpg'
+                    },
+                    {
+                        name:'laoyao',
+                        age:24,
+                        gender:'男',
+                        photo:'img/laoyao.jpg'
+                    }
+                ],
+                index:0
+            }
+            next(){
+                let index = this.state.index+1;
+                if(index>=this.state.data.length){
+                    index = 0;
+                }
+                this.setState({index})
+            }
+            render(){
+                return <div>
+                    <button onClick={this.next.bind(this)}>下一张</button>
+                    <Card data={this.state.data[this.state.index]} />
+                </div>
+            }
+        }
+
+
+        ReactDOM.render(
+            <ShowCard/>,
+            document.querySelector('#app')
+       )
+
+    </script>
+</body>
+
+</html>

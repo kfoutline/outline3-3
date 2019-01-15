@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>首页</title>
+</head>
+<body>
+    <h1>首页</h1>
+    <img src="img/laoxie.jpg" alt="">
+    <!-- <form action="/upload" method="post" enctype="multipart/form-data"> -->
+        <input type="file" name="goods" id="goods" multiple>
+        <input type="file" name="goods" >
+        <button class="btnSend">上传</button>
+        <button class="btnSends">多文件上传</button>
+    <!-- </form> -->
+    <script>
+        (()=>{
+            let btnSend = document.querySelector(".btnSend");
+            let btnSends = document.querySelector(".btnSends");
+            let goods = document.querySelector('#goods');
+
+            btnSend.onclick = ()=>{
+                let data = new FormData();
+                data.append('goods',goods.files[0]);
+
+                let xhr = new XMLHttpRequest();
+                xhr.onload = ()=>{
+                    console.log(xhr.responseText);
+                }
+                xhr.open('post','/upload',true);
+                xhr.send(data);
+            }
+
+            btnSends.onclick = ()=>{
+                let data = new FormData();
+                console.log(goods.files)
+                for(var i=0;i<goods.files.length;i++){
+                    console.log(goods.files[i].name)
+                    data.append('goods',goods.files[i],goods.files[i].name);
+                }
+                console.log(data,data.getAll('goods'));
+
+                let xhr = new XMLHttpRequest();
+                xhr.onload = ()=>{
+                    console.log(xhr.responseText);
+                }
+                xhr.open('post','/upload/goods',true);
+                xhr.send(data);
+            }
+        })();
+    </script>
+</body>
+</html>

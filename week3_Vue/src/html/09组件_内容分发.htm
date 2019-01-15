@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>09组件_内容分发</title>
+	
+</head>
+<body>
+	<h1>09组件_内容分发</h1>
+	<div id="app">
+		
+		<mynav>
+			<button slot="header">组件内的按钮</button>
+			<ul>
+				<li>data1</li>
+				<li>data2</li>
+				<li>data3</li>
+			</ul>
+			<strong slot="footer">123</strong>
+		</mynav>
+	</div>
+	<script src="lib/vue.js"></script>
+	<script>
+		let vm = new Vue({
+			el:'#app',
+
+			components:{
+				mynav:{
+					template:`
+						<div class="box">
+							<h4>以下为组件标签内的内容</h4>
+							<header>
+								<slot name="header"></slot>
+							</header>
+							<slot></slot>
+							<footer>
+								<slot name="footer"></slot>
+							</footer>
+						</div>
+					
+					`
+				}
+			}
+		})
+	</script>
+</body>
+</html>

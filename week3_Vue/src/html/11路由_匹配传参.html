@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>11路由_匹配传参</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<script src="lib/vue.js"></script>
+	<script src="lib/vue-router.js"></script>
+</head>
+<body>
+	<h1>11路由_匹配传参</h1>
+	<div id="app" class="container">
+		<nav class="nav nav-tabs">
+		  <router-link class="nav-link" :to="tab.link" v-for="tab in tabs" active-class="active" event="mouseover">{{tab.text}}</router-link>
+		</nav>
+		<div class="p-5 border">
+			<router-view></router-view>
+		</div>
+	</div>
+	<script>
+		/*
+			11路由_匹配传参
+				* params
+				* query
+		 */
+		
+		// 定义路由组件
+		const Home = {
+			template:`<div>
+				<h4>我的首页</h4>
+				<p>{{$route.params}}</p>
+			</div>`
+		}
+		const Hot = {
+			template:'<h4>热点新闻</h4>'
+		}
+		const Find = {
+			template:'<h4>发现</h4>'
+		}
+
+		const AboutMe = {
+			template:'<h4>设置</h4>'
+		}
+
+		const User = {
+			template:`<div>
+				<h4>hello</h4>
+				<router-view></router-view>
+			</div>`
+		}
+		
+		// 定义路由
+		const routes = [
+			{
+				path:'/',
+				component:Home
+			},
+			{
+				path:'/hot',
+				name:'hot',
+				component:Hot
+			},
+			{
+				path:'/find',
+				component:Find
+			},
+			{
+				path:'/aboutme',
+				component:AboutMe
+			},
+			{
+				path:'/user',
+				component:User,
+				children:[
+					{
+						path:'profile',
+						component:{
+							template:`<div>my profile</div>`
+						}
+					}
+				]
+			}
+		];
+
+		// 创建路由实例
+		let router = new VueRouter({
+			routes
+		});
+		
+
+		// 创建和挂载根实例
+		let vm = new Vue({
+			el:'#app',
+			data:{
+				tabs:[
+					{text:'首页',link:'/'},
+					{text:'热点',link:'/hot'},
+					{text:'发现',link:'/find'},
+					{text:'我的',link:'/aboutme'},
+					{text:'用户',link:'/user'},
+				]
+			},
+
+			// 配置路由选项，注入路由
+			router
+		})
+		
+
+		
+	</script>
+</body>
+</html>

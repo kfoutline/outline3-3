@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>03react组件</title>
+</head>
+
+<body>
+    <h1>03react组件</h1>
+    <div id="app"></div>
+    <div id="app2"></div>
+    <div id="app3"></div>
+    <script src="lib/react.development.js"></script>
+	<script src="lib/react-dom.development.js"></script>
+	<script src="lib/babel.min.js"></script>
+    <script type="text/babel">
+        //组件定义方式1：函数
+        function MyComponent(props){console.log(props)
+            return <h1 style={{textAlign:'center'}}>I'm a 组件 {props.myname}</h1>
+        }
+
+        //使用
+        ReactDOM.render(
+            <MyComponent myname="laoxie" />,
+            document.getElementById('app')
+        );
+
+
+        // 组件定义方式2：类
+        class About extends React.Component{
+            render(){console.log('class:',this)
+                return <div className="box">类组件{this.props.myname}</div>
+            }
+        }
+
+        ReactDOM.render(
+            <About myname="my name is lemon" />,
+            document.getElementById('app2')
+        )
+
+
+        // 组件定义方式3：复合组件
+        class Group extends React.Component{
+            render(){
+                return <article>
+                    <h4 style={{backgroundColor:'#58bc58'}}>{this.props.msg}</h4>
+                    <MyComponent myname={this.props.msg}/>
+                    <About/>
+                </article>
+            }
+        }
+        ReactDOM.render(
+            <Group msg="my name is group" />,
+            document.getElementById('app3')
+        )
+    </script>
+</body>
+
+</html>

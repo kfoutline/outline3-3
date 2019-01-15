@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Home</title>
+    <script src="js/mui.min.js"></script>
+</head>
+<body>
+	<div class="mui-slider">
+	  <div class="mui-slider-group mui-slider-loop">
+		<!--支持循环，需要重复图片节点-->
+		<div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img src="4.jpg" /></a></div>
+		<div class="mui-slider-item"><a href="#"><img src="../img/g1.jpg" /></a></div>
+		<div class="mui-slider-item"><a href="#"><img src="../img/g2.jpg" /></a></div>
+		<div class="mui-slider-item"><a href="#"><img src="../img/g3.jpg" /></a></div>
+		<div class="mui-slider-item"><a href="#"><img src="../img/g4.jpg" /></a></div>
+		<!--支持循环，需要重复图片节点-->
+		<div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img src="1.jpg" /></a></div>
+	  </div>
+	</div>
+	<script>
+        mui.ready(()=>{
+            var gallery = mui('.mui-slider');
+            gallery.slider({
+            interval:3000//自动轮播周期，若为0则不自动播放，默认为0；
+            });
+        })
+		
+	</script>
+</body>
+</html>

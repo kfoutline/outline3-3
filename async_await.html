@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>async_await</title>
+</head>
+<body>
+	<script>
+		/*
+			async
+			await
+		 */
+		async function getData(){
+			let p = new Promise((resolve,reject)=>{
+				console.log(666);
+				resolve('lemon');
+			});
+
+			// 返回promise对象
+			return p;
+		}
+
+		// var res = getData();
+		// res.then(function(num){
+		// 	console.log('num:',num);
+		// });
+		// console.log(res);
+
+		async function init(){
+			//等待getData的返回值
+			let n = await getData();
+
+			console.log('n:',n);
+		}
+
+		init();
+
+
+		// 函数参数列表和调用中的尾逗号合法性（Trailing commas）
+		function show(a,b,){
+		    
+		}
+
+		show(10,20);
+
+
+		var arr = [10,20,30,]
+
+	</script>
+</body>
+</html>

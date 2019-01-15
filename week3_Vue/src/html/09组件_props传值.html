@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>09组件_props传值</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<script src="lib/vue.js"></script>
+</head>
+<body>
+	<h1>09组件_props传值</h1>
+	<div id="app" class="app">
+     	<p>父组件内容：{{msg}}</p>
+
+     	<my-nav mytitle="组件标题" :myidx="10" myname="laoxie"></my-nav>
+   </div>
+
+	<template id="nav">
+		<nav :title="mytitle" :idx="myidx">
+			<ul>
+				<li><a href="#">首页</a></li>
+				<li><a href="#">列表</a></li>
+				<li><a href="#">详情</a></li>
+			</ul>
+		</nav>
+	</template>
+	<script>
+		/*
+			09组件_props传值
+				* 类型
+					* 全局组件
+						Vue.component(name,options)
+					* 局部组件
+						components:{name:options}
+				* 数据传递
+					* 父->子：
+						* 传递数据：props
+							* 在子组件上设置属性，并使用父组件的值
+							* 在子组件中利用props声明这些设置的属性，这样父组件就可以自动传值到子组件
+							PS：不建议直接修改父组件传入的值，而是作为子组件的初始值来使用
+						* 传递内容：<slot></slot>
+					* 子->父:
+						* 子组件上自定义事件，并使用父组件的事件处理函数
+							* 在子组件中使用v-on:事件名
+						* 子组件触发自定义事件：$emit()
+							* 会触发父组件的事件处理函数，从而实现数据传递
+				* 动态组件
+					<component is="name"></component>
+		 */
+    	
+    	let vm = new Vue({
+    		el:'.app',
+    		data:{
+    			msg:'hello laoxie'
+    		},
+    		components:{
+    			MyNav:{
+    				// 传值
+    				// props:['mytitle'],
+
+    				// 验证
+    				props:{
+    					mytitle:String,
+    					myidx:[Number,String],
+    					myname: {
+					        type: String,
+					        required: true
+					    }
+    				},
+    				template:'#nav'
+    			}
+    		}
+    	})
+		
+	</script>
+</body>
+</html>

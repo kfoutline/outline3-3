@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>todolist</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<style>
+		th label{margin:0;}
+	</style>
+	<script src="lib/vue.js"></script>
+	
+</head>
+<body>
+	<h1>todolist</h1>
+	<div class="container-fluid root">
+		<div class="input-group">
+			<input type="text" v-model="keyword" ref="keyword" class="form-control" @keyup.13="add">
+			<div class="input-group-append">
+			    <button class="btn btn-success" @click="add()">添加</button>
+			</div>
+		</div>
+
+
+		<table class="table table-sm">
+		  <thead>
+		    <tr>
+		      <th scope="col" width="100"><label><input type="checkbox" v-model="selectAll" value='100'>全选</label>{{selectAll}}</th>
+		      <th scope="col" width="100">#</th>
+		      <th scope="col">事项</th>
+		      <th scope="col" width="150">操作</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr v-for="(item,idx) in list" :class="{'table-dark':item.done,'table-active':item.selected}" @click="item.selected=!item.selected">
+		      <td><input type="checkbox" v-model="item.selected" :disabled="item.done"></td>
+		      <td>{{idx+1}}</td>
+		      <td>{{item.content}}</td>
+		      <td>
+		      	<div class="btn-group btn-group-sm">
+		      		<button class="btn btn-outline-primary" @click.stop="complete(item)" :disabled="item.done">完成</button>
+		      		<button class="btn btn-outline-danger" @click.stop="remove(idx)">删除</button>
+		      	</div>
+		      </td>
+		    </tr>
+		  </tbody>
+		</table>
+	</div>
+	<script>
+		/*
+			todolist
+		 */
+		let vm = new Vue({
+			el:'.root',
+			data:{
+				list:[
+					{
+						content:'你不能拼爹，所以只能拼命',
+						done:false,
+						selected:false
+					}
+				],
+				keyword:'',
+				// selectAll:false
+			},
+			computed:{
+				selectAll:{
+					get(){
+						return this.list.every(item=>item.selected);
+						
+					},
+					set(val){
+						this.list.forEach(item=>item.selected=val)
+					}
+				}
+			},
+			methods:{
+				add(){
+					this.list.unshift({
+						content:this.keyword,
+						done:false,
+						selected:false
+					});
+
+					this.keyword = '';
+				},
+				complete(item){
+					item.done = true;
+				},
+				remove(idx){
+					this.list.splice(idx,1);
+				}
+			},
+			watch:{
+				// 全选
+				// selectAll(){
+				// 	this.list.forEach(item=>item.selected=this.selectAll)
+				// },
+
+				// 全选反馈
+				// list(){
+				// 	this.selectAll = this.list.every(item=>item.selected);
+				// }
+			},
+			mounted:function(){
+			// DOM节点方式：与view耦合
+				// document.querySelector('#keyword').focus()
+				this.$refs.keyword.focus();
+			}
+		})
+		
+	</script>
+</body>
+</html>

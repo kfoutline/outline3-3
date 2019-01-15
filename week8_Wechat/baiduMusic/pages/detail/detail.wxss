@@ -1,0 +1,5 @@
+/* pages/detail/detail.wxss */
+
+.details{padding:8px;}
+.details image{width: 100%;}
+#myAudio{width:100%;}

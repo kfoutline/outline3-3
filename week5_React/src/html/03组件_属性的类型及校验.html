@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>03组件_属性的类型及校验</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+</head>
+
+<body>
+    <h1>03组件_属性的类型及校验</h1>
+    <div id="app"></div>
+    <script src="lib/react.development.js"></script>
+	<script src="lib/react-dom.development.js"></script>
+	<script src="lib/babel.min.js"></script>
+    <script type="text/babel">
+
+       class Button extends React.Component{
+            render(){
+                return <button>{this.props.myname}</button>
+            }
+
+        }
+
+        Button.propTypes = {
+            //自定义验证规则
+            myname:(props,propName,comName)=>{
+                console.log(props,propName,comName);
+
+                if(typeof props[propName] != 'string'){
+                    return new Error(propName + '必须为字符串');
+                }
+            }
+        }
+
+
+
+        ReactDOM.render(
+            <Button myname="laoxie" />,
+            document.querySelector('#app')
+       )
+
+    </script>
+</body>
+
+</html>

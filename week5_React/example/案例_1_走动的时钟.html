@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>案例_1_走动的时钟</title>
+</head>
+
+<body>
+    <h1>案例_1_走动的时钟</h1>
+    <div id="root"></div>
+    <div id="app"></div>
+    <script src="lib/react.development.js"></script>
+	<script src="lib/react-dom.development.js"></script>
+	<script src="lib/babel.min.js"></script>
+    <script type="text/babel">
+
+        // 传统方式
+        let tick = function(){
+            const element = <div>
+                <strong>现在时间是：</strong>
+                <time>{new Date().toLocaleTimeString()}</time>
+            </div>
+            ReactDOM.render(
+                element,
+                document.querySelector('#root')
+            );
+        
+        }
+
+        tick();
+        setInterval(tick,1000);
+
+
+        // 函数组件
+        function Clock(props){
+            return <div>
+                <strong>现在时间是：</strong>
+                <time>{props.date}</time>
+            </div>
+        }
+
+
+
+        //类组件
+        class MyClock extends React.Component{
+            constructor(){
+                super();
+
+                this.state = {
+                    date:this.format(new Date())
+                }
+
+                this.move = this.move.bind(this);
+            }
+
+            componentWillMount(){
+                setInterval(this.move,1000);
+            }
+
+            format(d){
+                let year = d.getFullYear();
+                let month = d.getMonth()+1;
+                let date = d.getDate();
+
+                let hours = d.getHours();
+                let min = d.getMinutes();
+                let sec = d.getSeconds();
+
+                hours = hours<10 ? '0'+hours : hours;
+                min = min<10 ? '0'+min : min;
+                sec = sec<10 ? '0'+sec : sec;
+
+                return `${year}-${month}-${date} ${hours}:${min}:${sec}`;
+            }
+
+            move(){
+                let d = new Date();
+
+                this.setState({date:this.format(d)});
+            }
+
+
+
+            render(){
+                return <Clock date={this.state.date} />
+            }
+        }
+
+
+        ReactDOM.render(
+            <MyClock/>,
+            document.querySelector('#app')
+        );
+    </script>
+</body>
+
+</html>

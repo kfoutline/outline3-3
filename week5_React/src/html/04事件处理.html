@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>04事件处理</title>
+</head>
+
+<body>
+    <h1>04事件处理</h1>
+    <div id="app"></div>
+    <script src="lib/react.development.js"></script>
+	<script src="lib/react-dom.development.js"></script>
+	<script src="lib/babel.min.js"></script>
+    <script type="text/babel">
+        function MyHeader(){
+            function show(e){
+                console.log(e,this);
+
+                e.preventDefault();
+            }
+            return <div>
+                <button onClick={show}>点我有惊喜</button>
+                <p><a href="http://www.baidu.com" onClick={show}>百度</a></p>
+            </div>
+        }
+
+
+        class MyEvent extends React.Component{
+
+            show(e){
+                console.log(e,this);//this为undefined
+                
+            }
+
+            say = ()=>{
+                console.log(this);//this为MyEvent组件
+            }
+            
+            render(){
+                return <button onClick={this.say}>大家好，我是渣渣辉</button>
+            }
+        }
+
+
+        ReactDOM.render(
+            <MyEvent/>,
+            document.querySelector('#app')
+        )
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>案例_4_TodoList</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+</head>
+
+<body>
+    <h1>案例_4_TodoList</h1>
+    <div id="app"></div>
+    <script src="lib/react.development.js"></script>
+	<script src="lib/react-dom.development.js"></script>
+	<script src="lib/babel.min.js"></script>
+    <script type="text/babel">
+        /*
+            TodoList
+                * 增
+                * 删
+                * 改
+                * 查
+
+
+            状态提升
+        */
+       class TodoList extends React.Component{
+            constructor(props){
+                super(props);
+
+                this.state = {
+                    list:[
+                        {
+                            content:'你不能拼爹，所以只能拼命',
+                            done:false,
+                            selected:false
+                        }
+                    ]
+                }
+
+                this.handlerAdd = this.handlerAdd.bind(this);
+                this.handlerRemove = this.handlerRemove.bind(this);
+                this.handlerComplete = this.handlerComplete.bind(this);
+            }
+
+            handlerAdd(text){
+                let arr = [...this.state.list];
+                arr.push({
+                    content:text,
+                    done:false,
+                    selected:false
+                });
+                this.setState({list:arr});
+            }
+
+            handlerRemove(idx){
+                this.state.list.splice(idx,1);
+                this.setState({list:this.state.list});
+
+            }
+
+            handlerComplete(idx){
+                this.state.list[idx].done = true;
+                this.setState({list:this.state.list})
+            }
+
+            render(){
+                return <div className="todolist container">
+                    <TodoForm handlerAdd={this.handlerAdd}/>
+                    <TodoContent 
+                    data={this.state.list} 
+                    handlerComplete={this.handlerComplete}
+                    handlerRemove={this.handlerRemove}
+                    />
+                </div>
+            }
+       }
+
+       class TodoForm extends React.Component{
+
+           handlerAdd(){
+               this.props.handlerAdd(this.refs.text.value);
+               this.refs.text.value = '';
+               this.refs.text.focus();
+           }
+
+        //    回车发送消息
+           handlerKeyup = (e)=>{
+               if(e.keyCode === 13){
+                   this.handlerAdd();
+               }
+           }
+
+           render(){
+                return <div className="input-group py-3">
+                        <input type="text" ref='text' className="form-control" onKeyUp={this.handlerKeyup} />
+                        <div className="input-group-append">
+                            <button className="btn btn-success" onClick={this.handlerAdd.bind(this)}>添加</button>
+                        </div>
+
+                    </div>
+           }
+       }
+
+
+        function TodoItem(props){
+            let {idx,item} = props.data;
+            let {handlerRemove,handlerComplete} = props;
+            return (
+                <tr className={item.done ? 'table-success' : ''}>
+                    <td>{idx+1}</td>
+                    <td>{item.content}</td>
+                    <td>{item.done ? '完成': '未完成'}</td>
+                    <td>
+                        <div className="btn-group">
+                            <button className="btn btn-outline-primary" onClick={handlerComplete.bind(this,idx)}>完成</button>
+                            <button className="btn btn-outline-danger" onClick={handlerRemove.bind(this,idx)}>删除</button>
+                        </div>
+                    </td>
+                </tr>
+            )
+        }
+
+        function TodoContent(props){
+            let {handlerRemove,handlerComplete} = props;
+            return (
+                <table className="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">内容</th>
+                        <th scope="col">是否完成</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {
+                        props.data.map((item,idx)=>{
+                            return <TodoItem data={{item,idx}} key={idx} handlerRemove={handlerRemove} handlerComplete={handlerComplete} />
+                        })
+                    }
+                    </tbody>
+                </table>
+            )
+        }
+
+
+
+        ReactDOM.render(
+            <TodoList/>,
+            document.querySelector('#app')
+       )
+
+    </script>
+</body>
+
+</html>

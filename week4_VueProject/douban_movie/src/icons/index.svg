@@ -1,0 +1,5 @@
+<!-- svg小图标 -->
+<svg style="display: none;" class="svg-container">
+    <symbol v-for="icon in icons" :key="icon.name" v-html="icon.path" :id="icon.name" :class="icon.options.class" :viewBox="icon.options.viewBox">
+    </symbol>
+</svg>

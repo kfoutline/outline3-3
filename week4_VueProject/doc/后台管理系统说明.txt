@@ -1,0 +1,70 @@
+后台管理系统
+	* 框架
+		* Vue
+		* Webpack
+		* Element-ui
+            * 组件
+	* 模块
+		* 商品管理
+			* 商品数据的增删改查
+			* 上架下架
+		* 用户管理
+			* 密码修改
+			* 禁用用户
+		* 订单管理（可选）
+后端：
+	* Nodejs
+	* MySQL/MongoDB
+   
+
+
+   如何对ajax请求进行拦截 
+   axios                $.ajax()
+    axions.get()        $.get()
+
+
+http://localhost:1804/api/weibo.php
+
+router-link
+
+   axios({
+        url,
+        method
+        data
+        headers
+    }).then()
+
+    $.ajax({
+        url:
+        type
+        headers
+    }).then()
+
+请求拦截
+路由拦截
+
+
+钩子函数：
+
+    登录成功 
+        * 返回一个标识token
+
+
+    把认证标识存入本地
+        * cookie
+        * localStorage
+        * sessionStorage
+
+
+登录成功，把认证消息写入本地
+sessionStorage.token = '10086'
+读取：sessionStorage.token
+sessionStorage.setItem('token','10086');
+读取：sessionStorage.getItem('token
+
+
+css动画：
+    * 过渡动画
+    * 关键帧动画
+
+<transition><component is></component></transition>

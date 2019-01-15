@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>01实例化</title>
+	<script src="lib/vue.js"></script>
+</head>
+<body>
+	<h1>01实例化</h1>
+	<div class="root">{{name}}</div>
+	<script>
+
+		/*
+			属性特性
+				第一种类型：值属性
+					* 值：value
+					* 可修改性（writable）:true/false
+					* 可枚举性（enumerable）:true/false
+					* 可配置性（configurable）：true/false，设置writable和enumerable是否可修改
+				第二种类型：存储器属性
+					* configurable
+					* enumerable
+					* getter：获取
+					* setter：设置
+
+
+			Object.defineProperty()
+		 */
+	
+		let person = {
+				name:'laoxie',//jingjing
+				age:18
+			}
+	
+			let vm = new Vue({
+				el:'.root',
+
+				// 把person对象挂载到Vue的实例，自动实现以下操作
+				// * 遍历person所有的属性，并把他们设置成存储器属性（setter&getter）
+				data:person
+			});
+
+			console.log(vm);
+
+			vm.name = 'didi';
+			vm.gender = '女';
+			//getter&setter
+
+			let lx = {
+				name:'laoxie',
+				age:18,
+				gender:'male',
+			}
+
+			// Object.defineProperty(lx,'age',{configurable:false});//
+			Object.defineProperty(lx,'age',{writable:false,enumerable:false})
+			// Object.defineProperties(lx,{
+			// 	age:{writable:false,enumerable:false},
+			// 	gender:{
+			// 		//...
+			// 	}
+			// })
+			lx.age = 30;
+
+			for(var key in lx){
+				console.log(key);//name,age,gender
+			}
+
+
+			// 存储器属性
+			Object.defineProperty(lx,'nickname',{
+				enumerable:true,
+				get(){
+					//获取属性值，必须有返回值
+					return 100
+				},
+				set(val){console.log('setter:',val)
+					//设置属性值，用于设置其他属性
+					this.name = val;
+				}
+			});
+
+			// lx.nickname;//调用get,得到100
+			// lx.nickname = 'laoxie 666';//调用set，把值传入set
+			
+			
+			// 实例化Vue时，会自动遍历data下的属性，并把他们变成存储器属性
+			let person2 = {...person};
+			for(var key in person2){
+				Object.defineProperty(person2,key,{
+					get(){
+						return person[key]
+					},
+					set(val){
+						person[key] = val;
+					}
+				})
+			}
+
+			person2.name = 'xxx'
+
+	</script>
+</body>
+</html>

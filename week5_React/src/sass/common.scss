@@ -1,0 +1,14 @@
+html,body,#app,.myapp{height:100%}
+
+
+.am-tab-bar-bar svg{width:16px;height:16px;}
+.am-tab-bar-item>div{padding:15px;}
+
+.nav{
+	a{display:inline-block;padding:0 15px;text-decoration:none;}
+	a.active{color:#f00;font-weight:bold;text-decoration:underline;}
+}
+.subnav{
+	width:160px;background-color:#efefef;padding:10px;
+	a{display:block;}
+}

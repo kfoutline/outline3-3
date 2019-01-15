@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>本地相册</title>
+	<style>
+		ul{padding:0;margin:0;list-style: none;}
+		.album{overflow:hidden;}
+		.album a{color:#333;}
+		.album li{position:relative;float:left;margin:10px;padding:5px;width:160px;height:120px;border:1px solid #ddd;}
+		.album img{width:160px;}
+		.album a span{position:absolute;left:0;right:0;bottom:0;padding:5px;background-color:rgba(255,255,255,.5);text-align:center;}
+		.album a:hover{color:#f60;}
+		.album .dir{background:url(css/dir.jpg) no-repeat center top;background-size:120px;}
+
+		.popover{position:fixed;top:0;right:0;bottom:0;left:0;padding:15px;background-color:rgba(0,0,0,.5);text-align:center;}
+		.popover .title{display:block;padding:10px 15px;font-size:18px;color:#fff;}
+		.popover .btn-close{position:absolute;right:10px;top:10px;width:30px;height:30px;line-height:30px;border-radius:50%;text-align:center;}
+		.popover .btn-close:hover{background-color:#f00;color:#fff;}
+		.popover img{max-width:1000px;max-height:720px;}
+	</style>
+</head>
+<body>
+	<h1>我的相册</h1>
+	<div id="album" class="album"></div>
+	<script>
+		var album = document.querySelector('#album');
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function(){
+			if(xhr.readyState == 4 && xhr.status == 200){
+				var data = JSON.parse(xhr.responseText);
+
+				// 组合html标签
+				var _html = '<ul>';
+
+				// 写入文件夹
+				_html += data.dir.map(function(dirname){
+					return '<li class="dir"><a href="/photo/'+data.path +'/'+ dirname+'"><span class="title">' + dirname + '</span></a></li>';
+				}).join('\n');
+
+				// 写入文件
+				_html += data.file.map(function(filename){
+					return '<li><a href="#"><img src="/img/'+data.path +'/'+ filename+'"><span clas="title">' + filename.replace(/\.[a-zA-Z]+$/,'') + '</span></a></li>';
+				}).join('\n');
+
+				album.innerHTML = _html + '</ul>';
+			}
+		}
+
+		xhr.open('get','/photo',false);
+		xhr.send();
+
+		// 点击查看图片
+		album.onclick = function(e){
+			if(e.target.tagName.toLowerCase() == 'img'){
+				var pop = document.querySelector('.popover');
+				if(!pop){
+					pop = document.createElement('div');
+					pop.className = 'popover';
+
+					var popBody = document.createElement('div');
+					popBody.className = 'body';
+					popBody.innerHTML = e.target.parentNode.innerHTML;
+
+					var btnClose = document.createElement('span');
+					btnClose.className = 'btn-close';
+					btnClose.innerHTML = '&times;';
+
+					btnClose.onclick = function(){
+						pop.style.display = 'none';
+					}
+
+					pop.appendChild(popBody);
+					pop.appendChild(btnClose);
+					document.body.appendChild(pop);
+				}else{
+					pop.children[0].innerHTML = e.target.parentNode.innerHTML;
+					pop.style.display = 'block';
+				}
+			}else if(e.target.className == 'dir'){console.log(e.target.href)
+				var url = e.target.href.replace(/#/,'');
+				console.log(url)
+				xhr.open('get',url,false);
+				xhr.send();
+			}
+			e.preventDefault();
+		}
+	</script>
+</body>
+</html>

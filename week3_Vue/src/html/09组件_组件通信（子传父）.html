@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>09组件_组件通信（子传父）</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<script src="lib/vue.js"></script>
+</head>
+<body>
+	<h1>09组件_组件通信（子传父）</h1>
+	<div id="app">
+	    <p :style="{fontSize:fontSize+'px'}">字体大小：{{fontSize}}</p>
+	    <btn-change :font-size="fontSize" @bigger="changeFontSize" class="btn btn-success" idx="10"></btn-change>
+	  </div>
+
+	  <template id="myButton">
+	    <button @click="change">改变字体大小</button>
+	  </template>
+	<script>
+		/*
+			09组件_组件通信（子传父）
+				
+		 */
+    	
+		 new Vue({
+		   el:'#app',
+		   data:{
+		       fontSize:16
+		   },
+		   components:{
+		     btnChange:{
+		       props:['fontSize'],
+		       data(){
+		         return {
+		           // 把传入的fontSize做为子组件的初始值
+		           initFontSize:this.fontSize
+		         }
+		       },
+		       template:'#myButton',
+		       methods:{
+		         change(){
+		           this.initFontSize++;
+
+		           // 手动触发自定义事件并传递修改后的值
+		           this.$emit('bigger',this.initFontSize);
+		         }
+		       }
+		     }
+		   },
+		   methods:{
+		     changeFontSize(val){
+		       // 触发自定义事件的事件处理函数，并修改字体大小
+		       this.fontSize = val;
+		     }
+		   }
+		 })
+		
+	</script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+	<style type="text/css">
+		.mui-slider-item img{height:200px}
+	</style>
+</head>
+<body>
+    <div class="mui-slider">
+        <div class="mui-slider-group mui-slider-loop">
+            <!--支持循环，需要重复图片节点-->
+            <div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img src="img/g5.jpg" /></a></div>
+            <div class="mui-slider-item"><a href="#"><img src="img/g1.jpg" /></a></div>
+            <div class="mui-slider-item"><a href="#"><img src="img/g2.jpg" /></a></div>
+            <div class="mui-slider-item"><a href="#"><img src="img/g3.jpg" /></a></div>
+            <div class="mui-slider-item"><a href="#"><img src="img/g4.jpg" /></a></div>
+			<div class="mui-slider-item"><a href="#"><img src="img/g5.jpg" /></a></div>
+            <!--支持循环，需要重复图片节点-->
+            <div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img src="img/g1.jpg" /></a></div>
+        </div>
+    </div>
+	<ul class="mui-table-view">
+		<li class="mui-table-view-cell mui-media">
+			<a href="javascript:;" class="mui-navigate-right" id="btnCapture">
+				<span class="mui-icon mui-icon-camera mui-media-object mui-pull-left"></span>
+				<div class="mui-media-body">
+					拍照
+					<p class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell mui-media">
+			<a href="#" class="mui-navigate-right">
+				<span class="mui-icon mui-icon-pengyouquan mui-media-object mui-pull-left"></span>
+				<div class="mui-media-body">
+					分享
+					<p class='mui-ellipsis'>想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖.</p>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell mui-media">
+			<a href="javascript:;" class="mui-navigate-right" id="btnRecord">
+				<span class="mui-icon mui-icon-mic mui-media-object mui-pull-left"></span>
+				<div class="mui-media-body">
+					语音
+					<p class='mui-ellipsis'>烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell mui-media">
+			<a href="javascript:;" class="mui-navigate-right">
+				<span class="mui-icon mui-icon-weixin mui-media-object mui-pull-left"></span>
+				<div class="mui-media-body">
+					支付
+					<p class='mui-ellipsis'>烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell mui-media">
+			<a href="javascript:;" class="mui-navigate-right">
+				<img class="mui-media-object mui-pull-left" src="img/g5.jpg">
+				<div class="mui-media-body">
+					CBD
+					<p class='mui-ellipsis'>烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
+				</div>
+			</a>
+		</li>
+	</ul>
+	
+	<script type="text/javascript" charset="utf-8">
+		mui.init();
+		var gallery = mui('.mui-slider');
+			gallery.slider({
+			interval:3000//自动轮播周期，若为0则不自动播放，默认为0；
+			});
+		let cmr,rec
+		document.addEventListener( "plusready", onPlusReady, false );
+		// 扩展API加载完毕，现在可以正常调用扩展API 
+		function onPlusReady() {
+			// 获取设备默认的摄像头对象 
+			cmr = plus.camera.getCamera();
+			rec = plus.audio.getRecorder(); 
+		}
+		
+		let btnCapture = document.getElementById('btnCapture');
+		let slider = document.querySelector('.mui-slider-group');
+		let last = slider.querySelectorAll('.mui-slider-item-duplicate')[1]
+		btnCapture.onclick = ()=>{
+			var resolution = cmr.supportedImageResolutions[0];
+			var format = cmr.supportedImageFormats[0];
+
+			cmr.captureImage( function( path ){
+
+					console.log('path:'+path)
+					plus.io.resolveLocalFileSystemURL( path, function(entry){
+						let realurl = entry.toLocalURL();
+						//console.log('data:'+data);
+						
+						
+						// <div class="mui-slider-item"><a href="#"><img src="img/g5.jpg" /></a></div>
+						let img = new Image();
+						img.src = realurl;
+						
+						let item = document.createElement('div');
+						item.className = 'mui-slider-item';
+						let link = document.createElement('a');
+						link.href = '#';
+						link.appendChild(img);
+						item.appendChild(link);
+						
+						slider.insertBefore(item,last);
+						last.children[0].src=realurl;
+						
+					}, function(){
+						
+					} );
+					
+					
+				},
+				function( error ) {
+					alert( "Capture image failed: " + error.message );
+				},
+				{resolution,format}
+			);
+		}
+	
+		// 录音
+		let btnRecord = document.querySelector('#btnRecord');
+		let recStatus = false
+		btnRecord.onclick = ()=>{
+			if(recStatus){
+				stopRecord();
+			}else{
+				startRecord();
+			}
+			
+			recStatus = !recStatus;
+		}
+		function startRecord() {
+			if ( rec == null ) {
+				alert( "Device not ready!" );
+				return; 
+			} 
+			rec.record( {filename:"_doc/audio/"}, function (recordFile ) {
+				console.log(recordFile)
+			}, function ( e ) {
+				alert( "Audio record failed: " + e.message );
+			} );
+		}
+		function stopRecord() {
+			rec.stop(); 
+		}
+	</script>
+</body>
+</html>

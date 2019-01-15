@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>06列表</title>
+</head>
+
+<body>
+    <h1>06列表</h1>
+    <div id="app"></div>
+    <script src="lib/react.development.js"></script>
+	<script src="lib/react-dom.development.js"></script>
+	<script src="lib/babel.min.js"></script>
+    <script type="text/babel">
+
+        let goodslist = [
+            {
+                "id":"G001",
+                "title":"Thermos 膳魔师 Funtainer系列水杯 12盎司（340g） 粉红色",
+                "category":"shoes",
+                "imgurl":"img/g1.jpg",
+                "url":"#",
+                "price":899,
+                "off":0.2,
+                "star":4,
+                "commentCount":10002
+            },
+            {
+                "id":"G002",
+                "title":"Thermos 膳魔师 Funtainer系列水杯 12盎司（340g） 粉红色",
+                "category":"shoes",
+                "imgurl":"img/g2.jpg",
+                "url":"#",
+                "price":698,
+                "off":0.2,
+                "star":4,
+                "commentCount":10002
+            },
+            {
+                "id":"G003",
+                "title":"Thermos 膳魔师 Funtainer系列水杯 12盎司（340g） 粉红色",
+                "category":"shoes",
+                "imgurl":"img/g3.jpg",
+                "url":"#",
+                "price":398,
+                "off":0.2,
+                "star":4,
+                "commentCount":10002
+            },
+            {
+                "id":"G004",
+                "title":"Thermos 膳魔师 Funtainer系列水杯 12盎司（340g） 粉红色",
+                "category":"shoes",
+                "imgurl":"img/g4.jpg",
+                "url":"#",
+                "price":998,
+                "off":0.2,
+                "star":4,
+                "commentCount":10002
+            },
+            {
+                "id":"G005",
+                "title":"Thermos 膳魔师 Funtainer系列水杯 12盎司（340g） 粉红色",
+                "category":"shoes",
+                "imgurl":"img/g5.jpg",
+                "url":"#",
+                "price":198,
+                "off":0.2,
+                "star":4,
+                "commentCount":10002
+            }
+        ];
+
+        const listItem = goodslist.map(goods=>{
+            return <li data-guid={goods.id} key={goods.id}>
+                <img src={goods.imgurl} />
+                <h4>goods.title</h4>
+                <p className="price">价格：<span>{goods.price}</span></p>
+            </li>;
+        });
+
+
+        //封装成组件
+        class GoodsList extends React.Component{
+            render(){
+                return <ul>
+                    {
+                        this.props.data.map(goods=>{
+                            return <li data-guid={goods.id} key={goods.id}>
+                                <img src={goods.imgurl} />
+                                <h4>goods.title</h4>
+                                <p className="price">价格：<span>{goods.price}</span></p>
+                            </li>
+                        })
+                    }
+                </ul>
+            }
+
+        }
+
+
+        ReactDOM.render(
+            //<ul>{listItem}</ul>,
+            <GoodsList data={goodslist} />,
+            document.querySelector('#app')
+        )
+    </script>
+</body>
+
+</html>

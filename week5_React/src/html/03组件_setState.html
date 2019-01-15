@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>03组件_setState</title>
+</head>
+
+<body>
+    <h1>03组件_setState</h1>
+    <div id="app"></div>
+    <script src="lib/react.development.js"></script>
+	<script src="lib/react-dom.development.js"></script>
+	<script src="lib/babel.min.js"></script>
+    <script type="text/babel">
+
+        class Counter extends React.Component{
+            constructor(props) {
+                super(props);
+                this.state = {
+                    age:22,
+                    clickCount: 0
+                };
+                this.handleClick = this.handleClick.bind(this);console.log(this)
+            }
+
+            handleClick() {console.log(this)
+                this.setState(function(state) {
+                    return {
+                        name:'laoxie',
+                        age:18,
+                        clickCount: state.clickCount + 1
+                    };
+                },()=>{
+                    //回调函数：成功修改state后执行，this指向实例
+                    console.log(this.state)
+                });
+
+
+
+                //不能在组件内部通过this.state修改状态，因为该状态会在调用setState()后被替换
+                //this.setState({clickCount:this.state.clickCount++});console.log(this.state.clickCount)
+            }
+            render () {
+                return (<button onClick={this.handleClick}>点我！点击次数为: {this.state.clickCount}</button>);
+            }
+        }
+
+        ReactDOM.render(
+            <Counter />,
+            document.getElementById('app')
+        );
+    </script>
+</body>
+
+</html>

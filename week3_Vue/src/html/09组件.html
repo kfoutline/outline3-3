@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>09组件</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<script src="lib/vue.js"></script>
+</head>
+<body>
+	<h1>09组件</h1>
+	<div id="app">
+		<div class="box">
+	        <my-nav :msg="title" @myevt="getSonDate">I'm in component</my-nav>
+	    </div>
+	    <mycomponent></mycomponent>
+	   <async-example></async-example>
+
+	   <table>
+	   		<tbody>
+	   			<!-- <my-tr></my-tr> 直接使用，浏览器会解析到tbody外面-->
+	   			<tr is="my-tr"></tr>
+	   		</tbody>
+	   </table>
+	</div>
+	<script>
+		/*
+			09组件
+				* 类型
+					* 全局组件
+						Vue.component(name,options)
+					* 局部组件
+						components:{name:options}
+				* 数据传递
+					* 父->子：
+						* 传递数据：props
+							* 在子组件上设置属性，并使用父组件的值
+							* 在子组件中利用props声明这些设置的属性，这样父组件就可以自动传值到子组件
+							PS：不建议直接修改父组件传入的值，而是作为子组件的初始值来使用
+						* 传递内容：<slot></slot>
+					* 子->父:
+						* 子组件上自定义事件，并使用父组件的事件处理函数
+							* 在子组件中使用v-on:事件名
+						* 子组件触发自定义事件：$emit()
+							* 会触发父组件的事件处理函数，从而实现数据传递
+				* 动态组件
+					<component is="name"></component>
+		 */
+		
+		// 全局组件
+		Vue.component('mycomponent',{
+		    template: `<div>这是一个自定义组件</div>`,
+		    data () {
+		      return {
+		        message: 'hello world'
+		      }
+		    }
+		 })
+
+		// 异步组件
+		Vue.component('async-example', function (resolve, reject) {
+			setTimeout(function () {
+				// 向 `resolve` 回调传递组件定义
+				resolve({
+					template: '<div>I am async!</div>'
+				})
+			}, 1000)
+		})
+		
+		var Child = {
+			props:['msg'],
+			data(){
+				return {
+					username:'laoxie'
+				}
+			},
+			template: `<div>
+				<h1>hello, {{username}}, you are {{msg}}</h1>
+				<div class="content"><slot></slot></div>
+				<button class="btn btn-warning" @click="$emit('myevt')">子组件</button>
+			</div>`
+		}
+		    
+		   // 创建根实例
+		let vm = new Vue({
+		     el: '#app',
+		     data:{
+		     	title:'good man'
+		     },
+		     components: {
+		       // <myNav> 将只在父模板可用
+		       'myNav': Child,
+		       myTr:{
+		       		data(){
+		       			return {
+		       				name:'我是一个tr'
+		       			}
+		       		},
+		       		template:`<tr>
+						<td>{{name}}</td>
+						<td>2列</td>
+		       		</tr>`
+		       }
+		     },
+		     methods:{
+		     	getSonDate(e){
+		     		console.log(e)
+		     	}
+		     }
+		   });
+
+		vm.$on('myevent',(a,b)=>{
+			console.log('自定义事件：',a,b)
+		})
+		
+	</script>
+</body>
+</html>

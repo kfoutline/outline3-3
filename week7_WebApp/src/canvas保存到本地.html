@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>绘制图片</title>
+	<style>
+		canvas{border:5px solid #666;background-color: #ffc}
+	</style>
+</head>
+<body>
+	<canvas id="myCanvas">
+		你的浏览器不支持canvas，请升级你的浏览器版本
+	</canvas>
+	<button id="btnSave">保存</button>
+	<script>
+		/*
+			1)基本绘制图片的方式
+				ctx.drawImage(img,x,y);
+				参数：
+					img: 是绘制图片的dom对象，
+					x,y: 绘制图片左上角的坐标 。
+			2)在画布上绘制图像，并规定图像的宽度和高度
+				ctx.drawImage(img,x,y,width,height);   
+				参数：
+					width 绘制图片的宽度， 
+					height：绘制图片的高度
+
+				如果指定宽高，最好成比例，不然图片会被拉伸
+				等比公式： height = 原高度*width/原宽度;
+			3)图片裁剪，并把裁剪完成后的那部分图片绘制到画布上
+				ctx.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
+				参数：
+					sx,sy 裁剪的左上角坐标，
+					swidth：裁剪图片的高度。
+					sheight:裁剪的高度	
+		 */
+				var canvas = document.querySelector('#myCanvas');
+				canvas.width = 800;
+				canvas.height = 600;
+				var ctx = canvas.getContext('2d');console.log(ctx)
+
+				// 用new Image创建一个dom节点
+				// 保持图片原始宽高
+				var img = new Image();
+				img.src = 'img/mv3.jpg';
+				img.onload = function(){
+					ctx.drawImage(img,10,10);
+				}
+
+				// 用createElement创建一个dom节点
+				// 指定宽高
+				var img2 = document.createElement('img');
+				img2.src = 'img/mv3.jpg';
+				img2.onload = function(){
+					ctx.drawImage(img2,340,10,200,200*img2.height/img2.width);
+				}
+
+				// 剪裁图片
+				var img3 = new Image();
+				img3.src = 'img/mv3.jpg';
+				img3.onload = function(){
+					ctx.drawImage(img3,90,20,160,160,550,10,80,80);
+				}
+
+
+				let btnSave = document.querySelector('#btnSave');
+
+				btnSave.onclick = function(){
+					let imgData = canvas.toDataURL();
+
+					console.log(imgData);
+
+					var type = 'png';
+
+					// 下载后的问题名
+					var filename = 'baidufe_' + (new Date()).getTime() + '.' + type;
+					// download
+					saveFile(imgData,filename);
+				}
+
+
+				var saveFile = function(data, filename){
+				    var save_link = document.createElement( 'a');
+				    save_link.href = data;
+				    save_link.download = filename;
+				   
+				    var event = document.createEvent('MouseEvents');
+				    event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+				    save_link.dispatchEvent(event);
+				};
+				   
+				
+
+	</script>
+</body>
+</html>

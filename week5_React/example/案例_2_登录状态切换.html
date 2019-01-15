@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>案例_2_登录状态</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+</head>
+
+<body>
+    <h1>案例_2_登录状态</h1>
+    <div id="app"></div>
+    <script src="lib/react.development.js"></script>
+	<script src="lib/react-dom.development.js"></script>
+	<script src="lib/babel.min.js"></script>
+    <script type="text/babel">
+        class Manager extends React.Component{
+            constructor(props){
+                super(props);
+                this.state = {
+                    login:false
+                }
+
+                //给方法绑定this
+                this.login = this.login.bind(this);
+                this.logout = this.logout.bind(this);
+            }
+
+            login(e){
+                console.log(e)
+                this.setState({login:true});
+
+                // 写入本地储存
+                localStorage.setItem('loginStatus',1);
+            }
+
+            logout(){
+                this.setState({login:false});
+
+                localStorage.removeItem('loginStatus');
+            }
+
+
+            componentWillMount(){
+                console.log('state:',this.state.login)
+
+                //先获取本地是否已存在登录状态
+                let loginState = localStorage.getItem('loginStatus');console.log(loginState)
+                if(loginState){
+                    this.setState({login:true});
+                }
+            }
+
+            render(){
+                /*let form = null;
+                if(!this.state.login){
+                    form = <LoginForm onClick={this.login} />
+                }else{
+                    form = <LogoutForm onClick={this.logout} />
+                }*/
+
+
+                return <div className="container">
+
+                    {
+                        this.state.login ? 
+                        <LogoutForm onClick={this.logout} />
+                        
+                        : 
+                        <LoginForm onClick={this.login} />
+                        
+                    }
+                </div>
+            }
+        }
+
+        class LoginForm extends React.Component{
+            render(){
+                return <div>
+                    <div className="form-group">
+                        <label htmlFor="username">Username</label>
+                        <input type="text" className="form-control" id="username" placeholder="Enter username"/>
+                        <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="password">Password</label>
+                        <input type="password" className="form-control" id="password" placeholder="Password"/>
+                    </div>
+                    <div className="form-check">
+                        <input type="checkbox" className="form-check-input" id="exampleCheck1"/>
+                        <label className="form-check-label" htmlFor="exampleCheck1">Check me out</label>
+                    </div>
+                    <button type="submit" className="btn btn-primary" onClick={this.props.onClick}>Login</button>
+                </div>
+            }
+        }
+
+        class LogoutForm extends React.Component{
+
+            render(){
+                return <button type="submit" className="btn btn-outline-dander" onClick={this.props.onClick}>Logout</button>
+            }
+        }
+
+        ReactDOM.render(
+            <Manager/>,
+            document.querySelector('#app')
+        )
+    </script>
+</body>
+
+</html>

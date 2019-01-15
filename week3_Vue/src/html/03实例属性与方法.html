@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>03实例属性与方法</title>
+	<link rel="stylesheet" href="css/element-ui.css">
+	<script src="lib/vue.js"></script>
+</head>
+<body>
+	<h1>03实例属性与方法</h1>
+	<div class="root">
+		.root - {{name}}
+		.root - __name__
+		<div class="box" v-html="content"></div>
+		{{hobby}} - {{nickname}}
+	</div>
+	<script>
+		/*
+			03实例属性与方法
+				* $el
+				* $data
+				* $watch
+				* $set
+				* 
+		 */
+		// 废弃
+		// Vue.config.delimiters = ['__','__'];//配置选项替代
+		// Vue.config.unsafeDelimiters = ['{{{','}}}']; //v-html替代
+		
+		// document.addEventListener('DOMContentLoaded',function(){
+			let data = {
+					name:'laoxie',
+					age:18,
+					content:'<h1>html外码输出</h1>',
+					hobby:['coding','abc'],
+					nickname:{}
+				}
+			let vm = new Vue({
+				el:'.root',
+				data,
+				watch:{
+					age:function(a,b){
+						console.log(666,a,b)
+					}
+				},
+				// delimiters:['__','__'], //修改插值表达式符号
+			});
+
+			console.log(vm)
+
+			// 同watch选项
+			vm.$watch('age',function(a,b){
+				console.log(777,a,b)
+			});
+
+			// 往相应系系统中添加数据
+			// vm.$set(data.hobby,2,'laoxie');
+
+
+		// });
+	</script>
+</body>
+</html>

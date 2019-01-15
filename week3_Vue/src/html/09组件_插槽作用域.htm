@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>09组件_插槽作用域</title>
+	
+</head>
+<body>
+	<h1>09组件_插槽作用域</h1>
+	<div id="app">
+		
+		<mynav>
+			<div slot-scope="props">
+				{{props.msg}}，{{props.username}}
+			</div>
+		</mynav>
+	</div>
+	<script src="lib/vue.js"></script>
+	<script>
+		let vm = new Vue({
+			el:'#app',
+
+			components:{
+				mynav:{
+					data(){
+						return {
+							msg:'来呀，快活啊',
+							username:'laoxie'
+						}
+					},
+					template:`
+						<div class="box">
+							<slot :msg="msg" :username="username">{{username}}，{{msg}}</slot>
+						</div>
+					
+					`
+				}
+			}
+		})
+	</script>
+</body>
+</html>

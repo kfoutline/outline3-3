@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>02配置选项</title>
+	<link rel="stylesheet" href="css/element-ui.css">
+	<script src="lib/vue.js"></script>
+</head>
+<body>
+	<h1>02配置选项</h1>
+	<div class="root">.root {{name}}</div>
+	<div class="root2">.root2 {{name}}</div>
+	<div class="mybox">
+		<h2>{{name}}</h2>
+		<h3>{{reverseName}}{{age}}</h3>
+		<p>data:{{now()}}</p>
+		<p>computed:{{cnow}}</p>
+	</div>
+	<script type="x-template" id="myDOM">
+		<div class="box">
+			<h2>配置模板</h2>
+		</div>
+	</script>
+	<template id="myDOM2">
+		<div class="box">
+			<h6>配置模板template</h6>
+		</div>
+	</template>
+	<script>
+		/*
+			02配置选项
+				* 关于DOM
+					* 渲染优先级：
+						* el > vm.$mount()
+						* render() > template > el.innerText
+				* 关于数据
+					* data
+					* computed
+		 */
+		document.querySelector('.root').onclick = function(){
+			console.log(666)
+		}
+		
+		// document.addEventListener('DOMContentLoaded',function(){
+			let vm = new Vue({
+				el:'.root',
+				data:{
+					name:'laoxie',
+					age:18
+				},
+
+				// template:'<h1>{{name}}</h1>'
+				template:'#myDOM2',
+				render:create=>{
+					let el = create('button','按钮');
+					console.log(el)
+					// el.innerText = ;
+					return el;
+				}
+			});
+
+			// 如不指定el选项，则需手动编译
+			// 会替换已存在的元素
+			vm.$mount('.root2')
+
+
+
+
+			/*
+				computed vs data
+			 */
+			let vm2 = new Vue({
+				el:'.mybox',
+				data:{
+					name:'laoxie',
+					age:18
+				},
+
+				methods:{
+					now(){
+						return Date.now();
+					}
+				},
+
+				computed:{
+					reverseName(){
+						return this.name.split('').reverse().join('');
+					},
+					cnow(){
+						return Date.now()
+					}
+				},
+			})
+
+
+		// });
+	</script>
+</body>
+</html>

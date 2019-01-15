@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>04指令directive_v-for</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<script src="lib/vue.js"></script>
+</head>
+<body>
+	<h1>04指令directive_v-for</h1>
+	<div id="app">
+		<p><button class="btn btn-primary" @click="show=!show">显示隐藏</button></p>
+		<template v-if="show">
+			<!-- template作为模板标签，不会显示到html结构中 -->
+			<img src="img/160.jpg">
+		</template>
+	</div>
+	<script>
+		/*
+			04指令directive_v-for
+				* v-for
+				* v-if
+			
+			template标签
+		 */
+		
+		let vm = new Vue({
+		  el: '#app',
+		  data: {
+		    show:true
+		  }
+		});
+		
+	</script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>开始使用VueX</title>
+	<style>
+		.product ul{list-style: none;padding:0;margin:0;}
+		.product li{padding:10px;border:1px solid #ddd;margin:10px;}
+		.product1 li{display:inline-block;}
+		.price{color:#f00;}
+		.price::before{
+			content:'￥';
+		}
+	</style>
+</head>
+<body>
+	<h1>开始使用VueX</h1>
+	<div id="app">
+		
+	</div>
+	<template id="myapp">
+		<div class="myapp">
+			<!-- <product1 :products="products"></product1>
+			<product2 :products="products"></product2> -->
+
+			<!-- vuex -->
+			<product1></product1>
+			<product2></product2>
+		</div>
+	</template>
+
+	<template id="pd1">
+		<div class="product product1">
+			<ul>
+				<li v-for="goods in products">
+					<strong>{{goods.name}}</strong>
+					<span class="price">{{goods.price}}</span>
+				</li>
+			</ul>
+		</div>
+	</template>
+	<template id="pd2">
+		<div class="product product2">
+			<ul>
+				<li v-for="goods in products">
+					<strong>{{goods.name}}</strong>
+					<span class="price">{{goods.price}}</span>
+				</li>
+			</ul>
+			<button @click="changePrice">改变价格</button>
+			<button @click="changePriceAsync">改变价格</button>
+		</div>
+	</template>
+	<script src="../node_modules/vue/dist/vue.js"></script>
+	<script src="../node_modules/vuex/dist/vuex.js"></script>
+	<script>
+		//创建一个仓库用与存储状态
+		const store = new Vuex.Store({
+			// 类似于组件中的data属性
+			// 能通过this.$store.state让所有的组件共享
+			state:{
+				products:[
+	                {name: '鼠标', price: 20},
+	                {name: '键盘', price: 40},
+	                {name: '耳机', price: 60},
+	                {name: '显示屏', price: 80}
+	            ]
+			},
+
+			// 类似于组件中的computed属性
+			// 能通过this.$store.getters让所有的组件共享
+			getters:{
+				saleProducts(state){
+					console.log(state);
+
+					return state.products.map(item=>{
+						return {
+							price:item.price/2,
+							name:item.name
+						}
+					});
+				}
+			},
+
+			// mutations
+			// 类似于组件中的methods,函数参数为(state,payload)
+			// 能通过this.$store.commit(type,payload)触发，进而修改state或getters中的数据
+			mutations:{
+				change(state,payload){
+					state.products.forEach(item=>{
+						payload(item);
+					});
+				}
+			},
+
+			// actions
+			// 类似于mutations，函数参数为(context,payload)，其中context为类似与store的对象（拥有共同的state,getters,commit,dispatch）
+			// 通过this.$store.dispatch()触发，间接触发mutations
+			actions:{
+				changeAsync(context,payload){
+					console.log(context,this);
+
+					// 延迟两秒执行
+					setTimeout(()=>{
+						context.commit('change',payload);
+
+					},2000)
+				}
+			}
+		});
+
+
+		console.log(store);
+
+		// 组件
+		let product1 = {
+			// props:['products'],
+			data(){
+				return {
+					// products:this.$store.state.products
+					products:this.$store.getters.saleProducts
+				}
+			},
+			template:'#pd1'
+		}
+		let product2 = {
+			// props:['products'],
+			data(){
+				return {
+					products:this.$store.state.products
+				}
+			},
+			template:'#pd2',
+			methods:{
+				changePrice(){
+					// 这里改变价格，product1中的价格没有发生变化, 是因为getters将价格进行了缓存
+					this.$store.commit('change',item=>{
+						item.price -= 2;
+					});
+				},
+				changePriceAsync(){
+					
+					this.$store.dispatch('changeAsync',item=>{
+						item.price += 2;
+					});
+				}
+			}
+		}
+
+		let myapp = {
+			data(){
+				return {
+					// products:[
+		   //              {name: '鼠标', price: 20},
+		   //              {name: '键盘', price: 40},
+		   //              {name: '耳机', price: 60},
+		   //              {name: '显示屏', price: 80}
+		   //          ]
+				}
+			},
+			template:'#myapp',
+			components:{
+				product1,
+				product2
+			}
+		}
+
+
+		let app = new Vue({
+			el:'#app',
+			template:`<myapp/>`,
+			components:{
+				myapp
+			},
+
+			// 注入store到vue实例
+			store
+		});
+
+
+	</script>
+</body>
+</html>

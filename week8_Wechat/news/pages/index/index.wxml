@@ -1,0 +1,25 @@
+<!--pages/index/index.wxml-->
+<view>
+<button bindtap="{{gotoCamera}}">拍照</button>
+<div>laoxie</div>
+<h4>{{username}}</h4>
+<strong>{{score}}</strong>
+<p wx:for="{{namelist}}" wx:key="*this">
+  {{index}} - {{item}}
+</p>
+
+<view wx:for="{{score}}" wx:key="abc">
+  {{index}} = {{item}}
+</view>
+</view>
+
+<template data="{{a:100}}">1234</template>
+
+<map
+  id="map"
+  longitude="{{longitude}}"
+  latitude="{{latitude}}"
+  scale="20"
+  style="width: 100%; height: 300px;"
+></map>
+
