@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title></title>
+    <link rel="stylesheet" href="css/mui.css">
+
+</head>
+
+<body>
+    <h1>h5+测试</h1>
+    <button type="button" class="mui-btn">默认</button>
+    <button type="button" class="mui-btn mui-btn-primary mui-btn-outlined">蓝色</button>
+    <button type="button" class="mui-btn mui-btn-success mui-btn-outlined">绿色</button>
+    <button type="button" class="mui-btn mui-btn-warning mui-btn-outlined">黄色</button>
+    <button type="button" class="mui-btn mui-btn-danger mui-btn-outlined">红色</button>
+    <button type="button" class="mui-btn mui-btn-royal mui-btn-outlined">紫色</button>
+    <ul class="mui-table-view list">
+        <li class="mui-table-view-cell mui-media">
+            <a class="mui-navigate-right" id="gotoCamera">
+                <div class="mui-media-object mui-pull-left mui-icon mui-icon-camera"></div>
+                <div class="mui-media-body">
+                    摄像头
+                    <p class='mui-ellipsis'>拍照、录像、扫码、录制小视频等</p>
+                </div>
+            </a>
+        </li>
+        <li class="mui-table-view-cell">
+            <a class="mui-navigate-right" id="btnSpeech">
+                <span class="mui-media-object mui-pull-left mui-icon mui-icon-mic"></span>
+                <div class="mui-media-body">
+                    语音助手
+                    <p class='mui-ellipsis'>语音搜索、唤醒、聊天...</p>
+                </div>
+            </a>
+        </li>
+        <li class="mui-table-view-cell">
+            <a class="mui-navigate-right" id="btnPosition">
+                <span class="mui-media-object mui-pull-left mui-icon mui-icon-image"></span>
+                <div class="mui-media-body">
+                    位置信息
+                    <p class='mui-ellipsis'>查看当前位置信息</p>
+                </div>
+            </a>
+        </li>
+        <li class="mui-table-view-cell">
+            <a class="mui-navigate-right" id="btnShare">
+                <span class="mui-media-object mui-pull-left mui-icon mui-icon-image"></span>
+                <div class="mui-media-body">
+                    分享
+                    <p class='mui-ellipsis'>系统、微信、QQ等分享功能</p>
+                </div>
+            </a>
+        </li>
+        <li class="mui-table-view-cell">
+            <a class="mui-navigate-right" id="btnPayment">
+                <span class="mui-media-object mui-pull-left mui-icon mui-icon-image"></span>
+                <div class="mui-media-body">
+                    支付
+                    <p class='mui-ellipsis'>支付宝、微信支付功能</p>
+                </div>
+            </a>
+        </li>
+    </ul>
+
+    <script type="text/javascript">
+        document.addEventListener('plusready', function () {
+            console.log("所有plus api都应该在此事件发生后调用，否则会出现plus is undefined。");
+            let gotoCamera = document.querySelector('#gotoCamera');
+
+            let wv;
+
+            gotoCamera.onclick = e => {
+                console.log('gotoCamera')
+                // 				wv = plus.webview.create('html/camera.html','page_camera');
+                // 				plus.webview.show('page_camera','slide-in-right');
+                plus.webview.open('html/camera.html', 'page_camera', 'slide-in-right');
+            }
+
+            // 语音输入
+            document.querySelector('#btnSpeech').onclick = () => {
+                console.log('speech start')
+                plus.speech.startRecognize({
+                    engine: 'iFly',
+                    lang: 'zh-cantonese'
+                }, (text) => {
+                    console.log(text)
+                }, () => {
+                    alert('fail')
+                });
+            }
+
+            // 位置与地图
+            document.querySelector('#btnPosition').onclick = () => {
+                plus.webview.open('html/map.html', 'page_map', 'slide-in-right');
+            }
+
+            // 分享
+            document.querySelector('#btnShare').onclick = e => {
+                // 				let left = btnShare.offsetLeft + 'px';
+                // 				let top = btnShare.offsetTop+64 + 'px'
+                // 				plus.webview.open('html/share.html','page_share','fade-in');
+
+
+                let actionbuttons;
+                let serviceList;
+                plus.share.getServices((services) => {
+                    console.log('services:', services);
+                    serviceList = services;
+                    actionbuttons = services.map((item, idx) => {
+                        return {
+                            title: item.description
+                        }
+                    })
+
+                    //按钮
+                    plus.nativeUI.actionSheet({
+                        title: "文章分享",
+                        cancel: "取消",
+                        buttons: actionbuttons,
+                    },
+                        function (e) {
+                            console.log("User pressed: " + e.index);
+                            if (e.index > 0) {
+                                let currentService = serviceList[e.index - 1];
+                                console.log(currentService)
+                                if (currentService.authenticated) {
+                                    currentService.send({
+                                        content: 'hello my name is laoxie'
+                                    }, () => {
+                                        console.log('分享成功')
+                                    })
+                                } else {
+                                    plus.nativeUI.alert(currentService.description + '未认证', () => { }, '分享失败', '确定');
+                                }
+
+                            }
+                        }
+                    );
+                });
+
+            }
+
+            // 支付
+            var PAYSERVER = 'http://demo.dcloud.net.cn/payment/?payid=';
+            document.querySelector('#btnPayment').onclick = function () {
+                plus.payment.getChannels(channels => {
+                    console.log('chennels:', channels)
+                    let actionbuttons = channels.map(channel => ({
+                        title: channel.description
+                    }))
+                    plus.nativeUI.actionSheet(
+                        {
+                            title: "选择支付方式",
+                            cancel: "取消",
+                            buttons: actionbuttons,
+                        },
+                        function (e) {
+                            console.log("User pressed: " + e.index);
+                            if (e.index > 0) {
+                                let pay = channels[e.index - 1];
+                                let id = pay.id;
+
+                                var url = PAYSERVER;
+
+                                if (id == 'alipay' || id == 'wxpay') {
+                                    url += id;
+                                } else {
+                                    plus.nativeUI.alert('当前环境不支持此支付通道！', null, '捐赠');
+                                    return;
+                                }
+
+                                if (pay.serviceReady) {
+                                    var appid = plus.runtime.appid;
+                                    if (navigator.userAgent.indexOf('StreamApp') >= 0) {
+                                        appid = 'Stream';
+                                    }
+                                    url += '&appid=' + appid + '&total=';
+									
+									let amount = 0.01
+
+                                    // 发起请求
+                                    var xhr = new XMLHttpRequest();
+                                    xhr.onreadystatechange = function () {
+                                        if (xhr.readyState == 4 && xhr.status == 200) {
+                                            console.log('----- 请求订单成功 -----');
+                                            console.log(xhr.responseText);
+                                            var order = xhr.responseText;
+                                            plus.payment.request(pay, order, function (result) {
+                                                console.log('----- 支付成功 -----');
+                                                console.log(result);
+                                                plus.nativeUI.alert('支付成功：感谢你的支持，我们会继续努力完善产品。', function () {
+                                                    back();
+                                                }, '捐赠');
+                                            }, function (e) {
+                                                console.log('----- 支付失败 -----');
+                                                console.log('[' + e.code + ']：' + e.message);
+                                                plus.nativeUI.alert(
+                                                    '更多错误信息请参考支付(Payment)规范文档：http://www.html5plus.org/#specification#/specification/Payment.html',
+                                                    null, '支付失败：' + e.code);
+                                            });
+
+                                        } else {
+                                            console.log('----- 请求订单失败 -----');
+                                            console.log(xhr.status);
+                                            plus.nativeUI.alert('获取订单信息失败！', null, '捐赠');
+                                        }
+                                    }
+                                    xhr.open('GET', url + amount);
+                                    console.log('请求支付订单：' + url + amount);
+                                    xhr.send();
+
+                                    //pay.requestOrder(ids, successCB, errorCB);
+                                } else {
+                                    plus.nativeUI.confirm(pay.description + '支付通道未安装，是否立即安装', (e) => {
+                                        if (e.index == 0) {
+                                            pay.installService();
+                                        }
+                                    }, {
+                                            title: '支付失败',
+                                            buttons: [{
+                                                title: "确定"
+                                            }, {
+                                                title: '取消'
+                                            }]
+                                        });
+
+                                }
+                            }
+                        },
+                        err => {
+
+                        }
+                    )
+
+                })
+            }
+		});
+    </script>
+</body>
+
+</html>

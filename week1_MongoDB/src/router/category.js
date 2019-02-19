@@ -1,9 +1,6 @@
 const express = require('express');
 const Router = express.Router();
 
-const bodyParser = require('body-parser');
-let urlencodedParser = bodyParser.urlencoded({ extended: false })
-
 const db = require('../db');
 
 //本模块操作的集合
@@ -22,7 +19,7 @@ Router.route('/')
         res.send(result);
     })
 
-    .put(urlencodedParser,async (req,res)=>{
+    .put(async (req,res)=>{
         let result;
         try{
             result = await db.insert(COLLECTION_NAME,{name:req.body.name,add_time:Date.now()});
@@ -51,7 +48,7 @@ Router.route('/:name')
         res.send(result);
     })
 
-    .post(urlencodedParser,async (req,res)=>{
+    .post(async (req,res)=>{
         let result;
         try{
             result = await db.update(COLLECTION_NAME,{name:req.params.name},{...req.body,edit_time:Date.now()});
@@ -61,7 +58,7 @@ Router.route('/:name')
         res.send(result);
     })
 
-    .delete(urlencodedParser, async (req,res)=>{
+    .delete( async (req,res)=>{
         let result;
         try{
             result = await db.delete(COLLECTION_NAME,{name:req.params.name,...req.body});

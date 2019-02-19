@@ -2,4 +2,7 @@
 
 .details{padding:8px;}
 .details image{width: 100%;}
-#myAudio{width:100%;}
+.player{position: relative;}
+.player .icon{position:absolute;left:50%;top:50%;transform: translate(-50%,-50%);width:100px;height:100px;
+background:no-repeat center;
+}

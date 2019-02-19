@@ -1,0 +1,46 @@
+// @import '~antd/dist/antd.css';
+@import './common';
+
+.ant-list-item{
+    h4{
+        //多行文本显示省略号
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;//显示行数
+        overflow: hidden;
+    }
+}
+
+.home{
+    width:100%;overflow:hidden;
+    .ant-carousel{
+        img{height:160px;}
+    }
+}
+
+.goods{
+    box-sizing:border-box;
+    .pic{text-align:center;}
+    header{
+        // position: absolute;left:0;right:0;top:0;padding:0.5rem;
+        // button:last-child{position:absolute;right:0.5rem;}
+        display:flex;justify-content:space-between;
+    }
+    h1{margin:10px;font-size:24px;}
+    .about{
+        >span{margin-right:20px;}
+    }
+    footer{
+        position: absolute;left:0;bottom:0;right:0;padding:0.5rem;border-top:1px solid #ddd;text-align:center;
+        i{display:block;font-size:20px;}
+        i.anticon-shopping-cart{font-size:25px;}
+    }
+}
+
+.cart{
+    footer{
+        // text-align:justify;text-align-last:justify;
+        display:flex;justify-content:space-between;
+        .totalPrie{padding:0 1rem 0 0.5rem;font-size:1.5rem;}
+    }
+}

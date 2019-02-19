@@ -8,20 +8,50 @@ Page({
    * 页面的初始数据
    */
   data: {
-    listid:null,
+    type:null,
     datalist:[],
-    size:10,
-    offset:0,
-    index:0,
-    loadding:false
+    pageNo:1,
+    loading:false,
+    hasMore:true
+  },
+
+  getData({ type = this.data.type, size = 10 }={}) {
+    let offset = (this.data.pageNo - 1) * size;
+    this.setData({
+      loading:true
+    });
+    app.getData({
+      data: {
+        type,
+        size,
+        offset
+      }
+    }).then(data => {
+      if (!data.song_list) {
+        this.setData({
+          hasMore: false,
+          loading:false
+        })
+        return;
+      }
+
+      // 设置数据到data
+      let datalist = this.data.datalist;
+      datalist = datalist.concat(data.song_list);
+      this.setData({
+        datalist,
+        loading:false
+      })
+    })
+
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function ({type}) {
     // 设置页面标题
-    let title = app.globalData.types.filter(item=>item.type==options.type)[0];
+    let title = app.globalData.types.filter(item=>item.type==type)[0];
     if(title){
       title = title.title;
       wx.setNavigationBarTitle({
@@ -30,29 +60,11 @@ Page({
     }
 
     this.setData({
-      listid: options.type
+      type
     });
 
-    wx.request({
-      url: 'https://tingapi.ting.baidu.com/v1/restserver/ting',
-      data: {
-        method: 'baidu.ting.billboard.billList',
-        type: this.data.listid,
-        size: this.data.size,
-        offset: this.data.offset
-      },
-      success: res => {
-        let data = res.data;
-        let datalist = data.song_list;
+    this.getData({type})
 
-        this.setData({
-          datalist
-        });
-      }
-    });
-
-  
-    
   },
 
   /**
@@ -94,33 +106,15 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-    let index = this.data.index;
-    index++;
+    let {pageNo,size} = this.data;
+    pageNo++;
 
-    let offset = this.data.size*index
+    let offset = size*(pageNo-1)
     this.setData({
-      index,
-      offset,
-      loadding:true
+      pageNo
     });
-    wx.request({
-      url: 'https://tingapi.ting.baidu.com/v1/restserver/ting',
-      data: {
-        method: 'baidu.ting.billboard.billList',
-        type: this.data.listid,
-        size: this.data.size,
-        offset: this.data.offset
-      },
-      success: res => {
-        let data = res.data;
-        let datalist = data.song_list;
 
-        this.setData({
-          datalist: [...this.data.datalist, ...datalist],
-          loading:false
-        });
-      }
-    });
+    this.getData()
   },
 
   /**

@@ -2,9 +2,6 @@ const path = require('path');
 const express = require('express');
 const Router = express.Router();
 
-const bodyParser = require('body-parser');
-let urlencodedParser = bodyParser.urlencoded({ extended: false });
-
 const multer = require('multer');
 
 const db = require('../db');

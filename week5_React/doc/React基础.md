@@ -268,6 +268,68 @@ Babel解析规则：
     3. 验证数据类型：子组件设置contextTypes静态属性声明和验证context
     4. 使用数据：子组件通过this.context.xxx获取需要的共享数据
 
+###高阶组件HOC（High Order Component）
+>
+* 高阶组件是一个函数，且该函数接受一个组件作为参数，并返回一个新组件
+* 高阶组件是一种设计模式，类似于装饰器模式
+
+####使用场景
+* 操纵 props
+* 通过 ref 访问组件实例
+* 组件状态提升
+* 用其他元素包装组件
+
+####使用
+* 定义一个HOC
+```js
+    //utils/withStorage.js
+    import React, { Component } from 'react'
+    const withStorage = WrappedComponent => {
+        return class extends Component{
+            componentWillMount() {
+                let data = localStorage.getItem('data')
+                this.setState({ data })
+            }
+
+            render() {
+                return <WrappedComponent data={this.state.data} {...this.props} /> 
+            }
+        }
+    }
+    export default withStorage
+```
+
+* 在组件中使用HOC
+```js
+    //components/Home.js
+    import React, { Component } from 'react'
+    import withStorage from '@/utils/withStorage'
+
+    class Home extends Component{
+        render() {
+            //通过高阶组件可以直接获取data
+            return <h2>{this.props.data}</h2>
+        }
+    }
+    export default withStorage(Home)
+```
+
+* ES7`@`装饰器写法
+```js
+    import React, { Component } from 'react'
+    import withStorage from '@/utils/withStorage'
+
+    @withStorage
+    class Home extends Component{
+        render() {
+            return <h2>{this.props.data}</h2>
+        }
+    }
+
+    export default Home
+```
+
+
 ## 事件处理
 * 采用驼峰式写法（如：onClick,onKeyDown）
 

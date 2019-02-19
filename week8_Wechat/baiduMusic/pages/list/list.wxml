@@ -1,18 +1,8 @@
+<import src="/template/index.wxml"/>
+
 <scroll-view>
-  <view class="weui-panel weui-panel_access">
-    <view class="weui-panel__bd">
-      <navigator wx:for="{{datalist}}" wx:key="song_id" url="/pages/detail/detail?id={{item.song_id}}" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
-          <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
-              <image class="weui-media-box__thumb" src="{{item.pic_small}}" />
-          </view>
-          <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-              <view class="weui-media-box__title">{{item.title}}</view>
-              <view class="weui-media-box__desc">歌手：{{item.author}}，人气：{{item.hot}}</view>
-          </view>
-      </navigator> 
-    </view>
-  </view>
-  <view class="weui-loadmore" hidden='{{!loadding}}'>
+  <template is="panel" data="{{datalist}}"/>
+  <view class="weui-loadmore" hidden='{{!loading}}'>
     <view class="weui-loading"></view>
     <view class="weui-loadmore__tips">正在加载</view>
   </view>

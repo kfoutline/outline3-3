@@ -20,21 +20,23 @@
 					function drawClock(){
 						// 先清空画布
 						clear();
-
+						
+						//保存初始状态
 						ct.save();
 
+
+						//把原点移动到画布中心，并保存状态
 						ct.translate(clock.offsetWidth/2,clock.offsetHeight/2);
+						ct.save();
 
 						// 画外表盘
-						ct.save();
 						ct.beginPath();
 						ct.lineWidth = 2;
 						ct.arc(0,0,99,0,2*Math.PI,false);
 						ct.stroke();
-						ct.restore();
+	
 
 						// 画内表盘
-						ct.save();
 						ct.beginPath();
 						ct.lineWidth = 1;
 						ct.arc(0,0,94,0,2*Math.PI,false);
@@ -46,10 +48,8 @@
 						g.addColorStop(1,'rgba(215,215,215,0.5)');
 						ct.fillStyle = g;
 						ct.fill();
-						ct.restore();
 
 						// 画表盘刻度线
-						ct.save();
 						for(var i=0;i<60;i++){
 							var start = {x:0,y:-94};
 							var dis;//刻度长度
@@ -72,7 +72,10 @@
 							ct.rotate(6*Math.PI/180);
 							ct.stroke();
 						}
+						// 由于画布有旋转，
+						// 需恢复到中心点状态并保存，以便绘制时针
 						ct.restore();
+						ct.save();
 
 						// 获取当前时间
 						var now = new Date();
@@ -82,7 +85,6 @@
 						var day = now.getDay();
 						var date = now.getDate();
 
-						ct.save();
 						ct.textAlign = 'center';
 						ct.font = '14px Arial';
 						// 时间显示补0
@@ -90,10 +92,8 @@
 						if(min < 10) min = '0' + min;
 						if(sec < 10) sec = '0' + sec;
 						ct.fillText(hour + ':' + min + ':' + sec,0,50);
-						ct.restore();
 
 						// 时针
-						ct.save();
 						ct.lineWidth = 4;
 						ct.rotate((hour+min/60)*30*Math.PI/180);
 						ct.beginPath();
@@ -101,10 +101,12 @@
 						ct.lineTo(0,-60);
 						ct.stroke();
 						ct.closePath();
+
+						// 恢复之前状态并保存，以便绘制分针
 						ct.restore();
+						ct.save();
 
 						// 分针
-						ct.save();
 						ct.lineWidth = 2;
 						ct.rotate((min+sec/60)*6*Math.PI/180);
 						ct.beginPath();
@@ -112,33 +114,42 @@
 						ct.lineTo(0,-70);
 						ct.stroke();
 						ct.closePath();
+
+						// 恢复之前状态并保存，以便绘制秒针
 						ct.restore();
+						ct.save();
 
 						// 秒针
-						ct.save();
-						ct.lineWidt = 1;
+						ct.lineWidth = 1;
 						ct.rotate(sec*6*Math.PI/180);
 						ct.beginPath();
 						ct.moveTo(0,0);
 						ct.lineTo(0,-80);
 						ct.stroke();
 						ct.closePath();
+						
+						// 恢复中心点状态
 						ct.restore();
+
 
 						// 星期
 						var str_day = ['sun','mon','tue','wed','thur','fri','sat']
 						ct.strokeStyle = '#333';
-						ct.font = '8px Gill Sans MT Condensed';
+						ct.font = '9px 微软雅黑,Gill Sans MT Condensed';
 						ct.strokeRect(38,-7,32,14);
 						ct.fillText(str_day[day],42,4);
 						ct.fillStyle = '#c00';
 						ct.fillText(date,57,4);
+						
+						// 恢复初始状态	
 						ct.restore();
 					}
 
 					// 时钟走动
 					drawClock();
 					setInterval(drawClock,1000);
+					
+
 				}
 			}
 			

@@ -1,4 +1,7 @@
 // pages/detail/detail.js
+var octicons = require("octicons");console.log(octicons)
+var svgToDataURL = require("svg-to-dataurl"); console.log(octicons.play.toSVG(),svgToDataURL(octicons.play.toSVG()))
+let app = getApp();
 Page({
 
   /**
@@ -7,44 +10,72 @@ Page({
   data: {
     id:'602870189',
     data:{},
-    song:{}
+    icons:{
+      play:app.svg2base64(octicons.play.toSVG({width:50})),
+      stop: app.svg2base64(octicons.stop.toSVG({ width: 50 })),
+    }
+  },
+
+  /**
+   * 事件--播放
+   */
+  handlePlay(){
+    let {data} = this.data;
+
+    //无播放器，则创建一个
+    if (!app.myPlayer.player){
+      app.myPlayer.player = wx.createInnerAudioContext();
+    }
+    
+
+    let { player, paused} = app.myPlayer;
+
+    player.src = data.file_link;
+    // 播放/暂停
+    if (paused){
+      player.play();
+    }else{
+      player.pause();
+    }
+
+    paused = !paused
+    this.setData({
+      paused
+    })
+    app.myPlayer.paused = paused;
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function ({id}) {
     //method=&=877578
-    console.log(this);
-
+    console.log('app:', app.myPlayer,this.data.paused)
     this.setData({
-      id:options.id
+      id,
+      paused: app.myPlayer.paused
     });
 
-    wx.request({
-      url: 'https://tingapi.ting.baidu.com/v1/restserver/ting',
-      data: {
+    app.getData({
+      data:{
         method: 'baidu.ting.song.play',
-        songid: this.data.id
-      },
-      success: res => {
-        let data = res.data;
-        let songInfo = data.songinfo;
-        let song = data.bitrate;
-        console.log(data);
-
-        this.setData({
-          data:songInfo,
-          song
-        });
-
-        //改变窗口文字为歌曲名字
-        wx.setNavigationBarTitle({
-          title: songInfo.title
-        })
-
+        songid:id
       }
-    });
+    }).then(data => {
+      console.log(data)
+      this.setData({
+        data: {
+          ...data.songinfo,
+          ...data.bitrate
+        }
+      });
+
+      //改变窗口文字为歌曲名字
+      wx.setNavigationBarTitle({
+        title: data.songinfo.title
+      })
+
+    })
 
 
   },
@@ -74,7 +105,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
+    
   },
 
   /**

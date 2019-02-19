@@ -30,7 +30,7 @@ canvas坐标系，从最左上角0,0开始。x向右增大， y向下增大
 ##Canvas API
 
 ###绘图上下文context
-上下文：工具包，是所有的绘制操作api的入口或者集合（[画图工具]）
+上下文：工具包，是所有的绘制操作api的入口或者集合
 
 1. canvas自身无法绘制任何内容。Canvas的绘图是使用JavaScript操作的。
 2. context对象就是JavaScript操作Canvas的接口
@@ -140,7 +140,7 @@ x, y是矩形左上角坐标， width和height都是以像素计（下同）
 ####方法
 * fillText(text,x,y)    填充字体
 * strokeText(text,x,y)  描边字体
-* measureText(text,x,y) 检测字体宽度,返回包含指定文本宽度的对象
+* measureText(text) 检测字体宽度,返回包含指定文本宽度的对象
     * text:文本
     * x,y：绘制文字起始坐标
 
@@ -173,7 +173,7 @@ x, y是矩形左上角坐标， width和height都是以像素计（下同）
     ctx.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
     参数：
     sx,sy 裁剪的左上角坐标，
-    swidth：裁剪图片的高度。
+    swidth：裁剪图片的宽度。
     sheight:裁剪的高度
 ```
 
@@ -275,7 +275,7 @@ scale(scaleWidth,scaleHeight) 方法缩放当前绘图，参数为0~1的值
 translate(x,y) 方法重新映射画布上的 (0,0) 位置
 
 * 旋转
-rotate(angle) 方法旋转当前的绘图，注意参数是弧度
+rotate(radian) 方法旋转当前的绘图，注意参数是弧度
 
 
 ###绘制环境保存和还原

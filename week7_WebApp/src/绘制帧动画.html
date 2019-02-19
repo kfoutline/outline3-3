@@ -59,7 +59,7 @@
 				// 速度
 				speed = 6;
 
-				img.onload = function(){
+				let render = function(){
 					// 获取没块图片的宽高（等分图片）
 					var trimWidth = img.width/defen;
 					var trimHeight = img.height/defen;
@@ -87,6 +87,8 @@
 					},1000/speed);
 				}
 
+				img.onload = render;
+
 				// 改变方向
 				var btnRotate = document.querySelector('#btnRotate');
 				var btnStop = document.querySelector('#btnStop');
@@ -103,7 +105,8 @@
 						canvas.moveTimer = null;
 						this.innerHTML = '重新开始';
 					}else{
-						window.location.reload();
+						// window.location.reload();
+						render()
 					}
 				}
 

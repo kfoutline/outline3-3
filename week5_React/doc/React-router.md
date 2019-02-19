@@ -132,8 +132,9 @@ react-router被分为一下几部分:
 * 利用`<Route/>`渲染的组件
 >直接通过props.history获取
 
-* withRouter
+* withRouter高阶组件（推荐）
 >利用withRouter高阶组件包装后,直接通过组件的props.history获取，就可以使用编程式导航进行点击跳转
+>高阶组件：一个包装函数
 
 * Context（了解，不推荐）
 >RR4 在 Router 组件中通过Contex暴露了一个router对象，router对象下包含history（即：this.context.router.history）
@@ -149,7 +150,7 @@ react-router被分为一下几部分:
 >在匹配路径path 的后面加上冒号 + 参数， 如`path ="goods/:id"`
 
 * 获取动态id方式：
-当渲染组件时，路由会给我们组件注入3个参数（history,location,match），这里使用match 就可以了，它有一个params属性，就是专门获取动态路由参数的
+当通过`<Route/>`渲染组件时，路由会给我们组件注入3个参数（history,location,match），这里使用match 就可以了，它有一个params属性，就是专门获取动态路由参数的
 
 ##嵌套路由
 props.match是实现嵌套路由的对象，当我们在某个页面跳转到它的下一级子页面时，我们不会显显性地写出当前页面的路由，而是用match对象的path和url属性。 

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../css/mui.css"/>
+		<style>
+			.mui-slider-group img{height:200px}
+			#myVideo{width:100%;height:200px;display:none;}
+		</style>
+	</head>
+	<body>
+		<h1>调用摄像头</h1>
+		<button type="button" class="mui-btn mui-btn-primary mui-btn-outlined" id="btnCapture">拍照</button>
+		<button type="button" class="mui-btn mui-btn-success mui-btn-outlined" id="btnStartVideo">录像</button>
+		<div class="mui-slider">
+		  <div class="mui-slider-group">
+			<div class="mui-slider-item"><img src="../img/g1.jpg" /></div>
+			<div class="mui-slider-item"><img src="../img/g2.jpg" /></div>
+			<div class="mui-slider-item"><img src="../img/g3.jpg" /></div>
+		  </div>
+		</div>
+		<div class="mui-card">
+			<!--页眉，放置标题-->
+			<div class="mui-card-header">视频展示</div>
+			<!--内容区-->
+			<div class="mui-card-content" id="myVideo">
+				<!-- <video id="myVideo"></video> -->
+			</div>
+			<!--页脚，放置补充信息或支持的操作-->
+			<!-- <div class="mui-card-footer">页脚</div> -->
+		</div>
+		<script src="../js/mui.js"></script>
+		<script>
+			// document.addEventListener('DOMContentLoaded',()=>{
+				
+				let btnCapture = document.querySelector('#btnCapture');
+				let btnStartVideo = document.querySelector('#btnStartVideo');
+				let btnStopVideo = document.querySelector('#btnStopVideo');
+				let iteGgroup = document.querySelector('.mui-slider-group');
+				
+				let myVideo = document.querySelector('#myVideo');
+				
+				
+				
+				document.addEventListener('plusready',plusReady);
+				function plusReady(){
+					// 获取摄像头管理对象
+					let camera = plus.camera;console.log('camera:',camera);
+					//获取需要操作的摄像头对象，如果要进行拍照或摄像操作，需先通过此方法获取摄像头对象。
+					// getCamera(index);返回涉嫌头对象{supportedImageResolutions,supportedImageFormat,supportedVideoResolutions,supportedVideoFormats,captureImage,startVideoCapture,stopVideoCapture}
+					// 1为主摄像头,2为辅摄像头
+					let cmr = camera.getCamera(1);console.log('cmr:',cmr);
+					
+					// 上传对象
+					let uploader = plus.uploader;
+					// 上传图片到服务器
+					let uploadTask = uploader.createUpload('http://192.168.0.114:4008/upload',{method:"POST"},(upload,state)=>{
+						console.log('uploadsuccess:',upload,state);
+					});
+					uploadTask.addEventListener( "statechanged", onStateChanged, false );
+					function onStateChanged( upload, status ) {console.log('status:',status)
+						if ( upload.state == 4 && status == 200 ) {
+							// 上传完成
+							console.log( "Upload success: ",upload,status);
+						}
+					}
+						
+					mui.init({
+						statusBarBackground: '#58bc58',
+					})
+					
+					//获得slider插件对象
+					var gallery = mui('.mui-slider');console.log('gallery',gallery)
+					gallery.slider({
+						interval:3000
+					});
+
+					
+					btnCapture.onclick = ()=>{
+						
+						// 拍照:captureImage()
+						// 录像:
+						// * startVideoCapture(): 调用摄像头进行摄像操作
+						// * stopVideoCapture(): 结束摄像操作
+						
+						cmr.captureImage(path=>{
+							console.log('success:',path);
+							// 转换为平台路径
+							let realPath = plus.io.convertLocalFileSystemURL(path);console.log('realPath:',realPath);
+							
+							
+							
+							
+							
+							
+							createItem(realPath);
+							
+							// 通过路径读取本地文件
+							plus.io.resolveLocalFileSystemURL(path, entry=>{
+								console.log(entry);
+								
+								uploadTask.addFile(entry.fullPath,{name:'goods'});
+								
+								uploadTask.start();
+							}, function(e){
+								console.log('读取拍照文件错误：'+e.message)
+							});
+						},{
+							index:1,
+							popover:{
+								top:'100px',
+								left:'20%',
+								width:'160px',
+								height:'160px'
+							}
+						})
+					}
+					
+					
+					btnStartVideo.onclick = ()=>{
+						cmr.startVideoCapture(path=>{
+							console.log('video.path:',path);
+							let realPath = plus.io.convertLocalFileSystemURL(path);console.log('realPath:',realPath);
+
+// 							myVideo.src = realPath;
+// 							myVideo.controls = true;
+// 							myVideo.style.display = 'block';
+							let player = plus.video.createVideoPlayer('videoPlayer', {
+								src:realPath,
+								top:'100px',
+								left:'0px',
+								width: '100%',
+								height: '200px',
+								position: 'static'
+							});
+							
+							plus.webview.currentWebview().append(player)
+						});
+					}
+				}
+				
+				// 生成图片到页面
+				function createItem(path){
+					let img = new Image();
+					img.src = path;
+					let item = document.createElement('div');
+					item.className = 'mui-slider-item';
+					item.appendChild(img);
+					img.onload = ()=>{
+						iteGgroup.appendChild(item);
+					}
+				}
+			// })
+			
+		</script>
+	</body>
+</html>

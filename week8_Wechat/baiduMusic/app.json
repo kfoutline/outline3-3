@@ -1,14 +1,16 @@
 {
-  "pages":[
-    
+  "pages": [
     "pages/index/index",
     "pages/search/search",
     "pages/detail/detail",
-    "pages/list/list"
-   
+    "pages/list/list",
+    "pages/player/player"
   ],
-  "window":{
-    "navigationBarTitleText":"百度音乐",
-    "navigationBarBackgroundColor":"#f00"
+  "window": {
+    "navigationBarTitleText": "百度音乐",
+    "navigationBarBackgroundColor": "#f00"
+  },
+  "usingComponents": {
+    "mycom": "/components/mycom/mycom"
   }
 }

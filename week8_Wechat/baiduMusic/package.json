@@ -1,0 +1,19 @@
+{
+  "name": "baidumusic",
+  "version": "1.0.0",
+  "description": "百度音乐",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "音乐",
+    "热门音乐"
+  ],
+  "author": "laoxie",
+  "license": "ISC",
+  "dependencies": {
+    "octicons": "^8.4.1",
+    "svg-to-dataurl": "^1.0.0"
+  }
+}

@@ -1,0 +1,20 @@
+@import './var';
+
+.price{
+    del{
+        color:666;
+        &::before{content:'￥'}
+    }
+    span{
+        &::before{content:'￥'}
+        color:#f00
+    }
+    del+span{margin-left:0.5rem;}
+}
+.content-justify{
+    display:flex;justify-content: space-between;
+}
+.container{
+    display:flex; flex-direction: column; position:relative;height:$fullscreen;
+    >main{padding:0.5rem;flex:1}
+}

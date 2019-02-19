@@ -8,6 +8,7 @@
     </swiper-item>
   </navigator>
 </swiper>
+<!-- 搜索 -->
 <view class="weui-search-bar__form" bind:tap="gotoSearch">
   <view class="weui-search-bar__box">
       <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
@@ -18,6 +19,7 @@
       <view class="weui-search-bar__text">{{keyword}}</view>
   </label>
 </view>
+<!-- tab标签 -->
 <view class="weui-tab">
   <view class="weui-navbar">
       <block wx:for="{{tabs}}" wx:key="type">
@@ -34,5 +36,5 @@
       </view>
   </view>
 </view>
-<template is="panel" data="{{title:'热门歌曲',datalist:list_hot}}"/>
-<template is="panel" data="{{title:'最新歌曲',datalist:list_new}}"/>
+<template is="panel" data="{{title:'热门歌曲',datalist:list_hot,type:2}}"/>
+<template is="panel" data="{{title:'最新歌曲',datalist:list_new,type:1}}"/>

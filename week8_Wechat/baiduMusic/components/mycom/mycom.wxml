@@ -1,0 +1,5 @@
+<!--components/mycom/mycom.wxml-->
+<view>
+  <text>自定义组件-{{d}}-</text>
+  <slot></slot>
+</view>

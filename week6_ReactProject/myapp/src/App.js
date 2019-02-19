@@ -21,7 +21,7 @@ import axios from 'axios';
 import 'antd-mobile/dist/antd-mobile.css';
 import './sass/common.scss';
 
-// 配置baseUrl
+// 配置baseUrl：week1_Nodejs/server/data_server.js
 axios.defaults.baseURL = 'http://localhost:4004';
 
 library.add(faShoppingBasket, faHome, faFingerprint, faUser);
@@ -138,7 +138,7 @@ class App extends Component {
 
 
 
-function mapStateToProps(state) {
+function mapStateToProps(state,ownprops) {
     return {
         showTabbar:state.common.showTabbar,
         cartList: state.shoppingCart.cart
