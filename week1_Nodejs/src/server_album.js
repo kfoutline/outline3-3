@@ -5,7 +5,7 @@ const path = require('path');
 
 const mime = require('./js/mime');
 
-const PORT = 3003;
+const {PORT} = require('./config.json');
 
 http.createServer(function(req,res){
 	let {pathname} = url.parse(req.url,true);

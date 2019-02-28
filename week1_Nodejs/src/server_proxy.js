@@ -6,6 +6,8 @@ const express = require('express');
 // const proxy = require('express-http-proxy');
 var proxy = require('http-proxy-middleware');
 
+const {PORT} = require('./config.json');
+
 let app = express();
 
 app.use(express.static('./'))
@@ -53,8 +55,8 @@ app.use('/jxapi', proxy({
     }
 }));
 
-app.listen(4004, function(){
-    console.log('Server running on http://localhost:4004');
+app.listen(PORT, function(){
+    console.log('Server running on http://localhost:'+PORT);
 });
 
 

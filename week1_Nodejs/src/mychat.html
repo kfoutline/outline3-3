@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>多人聊天室</title>
+	<style>
+		ul{list-style: none;padding:0;margin:0;}
+		.msg-list{position:relative;width:600px;margin:0 auto;}
+		.msg-list ul{padding:10px;min-height:200px;max-height:400px;overflow-y:auto;border:1px solid #ddd;}
+		.msg-list li{float:left;clear:both;margin:10px 0;padding:5px;line-height:2;border-radius:5px;background-color:#efefef;}
+		.msg-list li.active{float:right;background-color:#58bc58;color:#fff;}
+		.msg-list textarea{display:block;min-height:50px;margin:10px 0;width:100%;box-sizing: border-box;}
+		.status{display:none;position: absolute;left:50px;bottom:0;right:0;padding:5px 10px;text-align:center;color:#999;}
+		.login{text-align:right;}
+	</style>
+</head>
+<body>
+	<h1>多人聊天室</h1>
+	<div id="autoAnswer" class="msg-list">
+		<div class="login"><input type="text" name="username" id="username"><button class="btn-login">进入</button><button class="btn-logout">退出</a></div>
+		<ul>
+		</ul>
+		<textarea></textarea>
+		<button class="btn-send">提交</button>
+		<div class="status"></div>
+	</div>
+	<script>
+		(function(){
+			let autoAnswer = document.querySelector('#autoAnswer');
+			let login = autoAnswer.querySelector('.login');
+			let username = login.children[0];
+			let btnLogin = login.children[1];
+			let btnLogout = login.children[2];
+
+			let msglist = autoAnswer.querySelector('ul');
+			let msg = autoAnswer.querySelector('textarea');
+			let btnSend = autoAnswer.querySelector('.btn-send');
+			let statusBar = autoAnswer.querySelector('.status');
+
+			// 获取进入聊天室用户名
+			// let _username = localStorage.username;
+			// if(!_username){
+			// 	_username = prompt('好汉，请留下你的大名');
+				
+			// 	while(!_username){
+			// 		_username = prompt('以不，一定得留下你的大名')
+			// 	}
+			// 	localStorage.username = _username;
+			// }
+			// username.innerText = _username;
+
+			// 存放消息列表
+			let datalist = [];
+			let socket;
+
+			// 定义WebSocket
+			
+			/*
+				status:
+					0:退出登录
+					1:登录成功
+					2:发送成功
+			 */
+
+			// 进入与退出
+			login.onclick = e=>{
+				// 进入
+				if(e.target.className === 'btn-login'){
+					socket = new WebSocket('ws://10.3.137.11:3000');
+					socket.onopen = (e)=>{console.log('e:',e)
+						statusBar.style.display = 'block';
+						statusBar.innerText = '服务已连接 ' + e.target.url;
+						username.disabled = true;
+						socket.send(JSON.stringify({status:1,data:{username:username.value,msg:'登录成功'}}));
+					}
+
+					socket.onclose = (e)=>{
+						statusBar.innerText = '已断开服务 ' + e.target.url;
+						username.disabled = false;
+					}
+
+					socket.onmessage = (e)=>{
+						let {status,data} = JSON.parse(e.data);
+						switch(status){
+							case 0: 
+								statusBar.innerText = `${data.username} 退出群聊`;
+								break;
+							case 1: 
+								statusBar.innerText = `${data.username} 进入聊天室`;
+								break;
+							case 2: 
+								datalist.push(data);
+								render();
+								break;	
+						}
+					}
+				}else if(e.target.className === 'btn-logout'){
+					socket.send(JSON.stringify({status:0,data:{username:username.value,msg:'退出成功'}}));
+					socket.close();
+				}
+			}
+
+			
+			// 发送消息
+			btnSend.onclick = ()=>{
+				
+				socket.send(JSON.stringify({
+					status:2,
+					data:{
+						username:username.value,
+						msg:msg.value,
+						time:Date.now()
+					}
+				}));
+
+				msg.value = '';
+				msg.focus();
+			}
+			
+			function render(){console.log('datalist:',datalist)
+				msglist.innerHTML = datalist.map(item=>{
+					return `<li ${item.username===username.value ? 'class="active"':''}>
+						<strong>${item.username}</strong><div>${item.msg}</div> <time>${item.time}</time>
+					</li>`
+				}).join('\n');
+			}
+		})();
+	</script>
+</body>
+</html>

@@ -4,110 +4,108 @@ const {MongoClient,ObjectId} = mongodb;
 
 const {DBhost,database} = require('../config.json');
 
-exports.connect = ()=>{
-    //连接MongoDB并连接数据库，无则自动创建
-    return new Promise((resolve,reject)=>{
-        MongoClient.connect(DBhost,{useNewUrlParser:true},(err, client)=>{
-            if(err) throw err;
-            let db = client.db(database);
-            
-            resolve({db,client});
+exports.connect = async ()=>{
+    //连接MongoDB
+    let client = await MongoClient.connect(DBhost,{useNewUrlParser:true});
 
-            // client.close();
-        });
-    });
+    // 连接数据库，无则自动创建
+    let db = client.db(database);
+            
+    return {db,client};
 }
 
 
 //封装增删查改
-exports.insert = (collectionName,data)=>{
-    return new Promise(async (resolve,reject)=>{
-        let {db,client} = await this.connect();
+exports.insert = async (collectionName,data)=>{
 
-        let col = db.collection(collectionName);
-        
-        col[Array.isArray(data)?'insertMany':'insertOne'](data,(err,result)=>{
-            if(err){
-                reject(err);
-            }
-            resolve(result);
+    let {db,client} = await this.connect();
 
-            client.close();
-        })
-    });  
+    let col = db.collection(collectionName);
+    
+    let result;
+    try{
+        result = await col[Array.isArray(data)?'insertMany':'insertOne'](data);
+    }catch(err){
+        result = err;
+    }
+
+    client.close();
+
+    return result;
 }
 
 /**
  * @删除
  * 支持单条删除和多条删除
  */
-exports.delete = (collectionName,query)=>{
-    return new Promise(async (resolve,reject)=>{
-        let {db,client} = await this.connect();
+exports.delete = async (collectionName,query)=>{
 
-        let col = db.collection(collectionName);
+    let {db,client} = await this.connect();
 
-        // 条件筛选
-        // 如有id, 则只要使用id查询
-        if(query._id){
-            query = {_id:ObjectId(query._id)};
-        }
-        
-        col[Array.isArray(query)?'deleteMany':'deleteOne'](query,(err,result)=>{
-            if(err){
-                reject(err);
-            }
-            resolve(result);
+    let col = db.collection(collectionName);
 
-            client.close();
-        })
-    });  
+    // 条件筛选
+    // 如有id, 则只要使用id查询
+    if(query._id){
+        query = {_id:ObjectId(query._id)};
+    }
+
+    let result;
+    try{
+        result = await col[query._id?'deleteOne':'deleteMany'](query);
+    }catch(err){
+        result = err;
+    }
+
+    client.close();
+
+    return result;
 }
 
 /**
  * @修改
  * 支持单条和多条修改
  */
-exports.update = (collectionName,query,data)=>{
-    return new Promise(async (resolve,reject)=>{
+exports.update = async (collectionName,query,data)=>{
         let {db,client} = await this.connect();
 
         let col = db.collection(collectionName);
         
-        
-        col[Array.isArray(query)?'updateMany':'updateOne'](query,{$set:data},(err,result)=>{
-            if(err){
-                reject(err);
-            }
-            resolve(result);
+        let result;
+        try{
+            result = await col[query._id?'updateOne':'updateMany'](query,{$set:data});
+        }catch(err){
+            result = err;
+        }
 
-            client.close();
-        })
-    });  
+        client.close();
+
+        return result;
 }
 
 /**
  * @修改
  * 支持单条和多条修改
  */
-exports.find = (collectionName,query)=>{
-    return new Promise(async (resolve,reject)=>{
-        let {db,client} = await this.connect();
+exports.find = async (collectionName,query)=>{
 
-        let col = db.collection(collectionName);
+    let {db,client} = await this.connect();
 
-        // 条件筛选
-        if(query._id){
-            query._id = ObjectId(query._id);
-        }
-        
-        col.find(query).toArray((err,result)=>{
-            if(err){
-                reject(err);
-            }
-            resolve(result);
+    let col = db.collection(collectionName);
 
-            client.close();
-        })
-    });  
+    // 条件筛选
+    if(query._id){
+        query._id = ObjectId(query._id);
+    }
+
+    let result;
+    try{
+        result = await col.find(query).toArray();
+    }catch(err){
+        result = err;
+    }
+
+    client.close();
+
+    return result;
 }

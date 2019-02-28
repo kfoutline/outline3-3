@@ -15,7 +15,7 @@ let mime = require('./js');
 // 创建静态资源服务器
 let app = http.createServer((req,res)=>{
 
-
+    
     // 格式化url，并格式化url中的search参数
     // 解构文件路径
 	let {pathname} = url.parse(req.url,true);
@@ -57,7 +57,7 @@ let app = http.createServer((req,res)=>{
     })
 });
 
-let PORT = 2000;
+let {PORT} = require('./config.json');
 app.listen(PORT,()=>{
 	console.log('http://localhost:%s',PORT);
 });

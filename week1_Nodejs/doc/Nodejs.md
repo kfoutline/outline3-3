@@ -130,15 +130,7 @@ module.exports = hello;
 >原生模块不需要安装，直接引入使用
 
 ##### http 模块
->利用nodejs创建http服务器
-
-```javascript
-    //引入原生模块
-    var http = require('http');
-    http.createServer(function(request, response){
-        response.end('服务器启动成功，端口为8080');
-    }).listen(8080);
-```
+>利用nodejs创建http服务器，当每个请求到达服务器时，nodejs会为请求创建一个请求对象（request），request对象包含客户端提交上来的数据。同时也会创建一个响应对象（response），response对象主要负责将服务器的数据响应到客户端
 
 * 常用属性/方法
     * request.url
@@ -147,6 +139,14 @@ module.exports = hello;
     * response.write()
     * response.writeHead()
     * response.end()
+
+```javascript
+    //引入原生模块
+    var http = require('http');
+    http.createServer(function(request, response){
+        response.end('服务器启动成功，端口为8080');
+    }).listen(8080);
+```
     
 * 参数处理之GET请求
 >get请求的参数在url地址中，所以需要对url进行处理，需要用到url模块（详情请查看[url模块](link) 和 [querystring模块](link)）
@@ -492,7 +492,7 @@ module.exports = hello;
           .pipe(fs.createWriteStream('input1.txt'));
     ```
 
-    >PS: 多文件的压缩与解压：tar模块
+    >PS: 多文件的压缩与解压：第三方模块 tar
 
 ### 路由
 >在 BS 架构中，路由的概念都是一样的，可理解为根据客户端请求的 URL 响应不同的内容，一般根据 URL 中的路径、参数、锚点等信息进行响应。

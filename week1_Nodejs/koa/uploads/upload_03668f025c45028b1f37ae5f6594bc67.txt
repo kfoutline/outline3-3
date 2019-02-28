@@ -1,0 +1,46 @@
+﻿webpack能做什么
+	* 编译.vue  		vue-loader
+	* 合并压缩   	mode
+	* ES6->ES5  	babel-loader
+	* Sass编译		sass-loader
+	* 提取公共css 	extract-text-webpack-plugin
+	* 提取公共js 	splitChunk
+
+	* 代理服务器
+	* webpack-cli
+
+
+ES6模块化
+	* import
+	* export
+
+Vue
+	* Router
+	* VueX
+	* axios
+
+	* 特殊属性
+	* vue-awesome-swiper
+
+项目：
+	* vue + mint-ui + webpack
+
+Vue-Router
+	* 路由复用是（声明周期函数不会执行，解决方案如下：）
+		* watch
+		* beforeRouteUpdate(vue2.2)
+	* 匹配优先级:谁先定义，谁先匹配
+	* 编程式路由
+	* 命名视图
+
+浏览器自带工具
+	1、Chrome Developer Tools
+	2、Firebug
+	3、IE Developer Tools
+	4、IEtester
+第三方工具
+	5、PostMan
+	6、Fiddler抓包工具
+	7、BrowserSync多浏览器测试工具
+	8、weinre远程调试工具
+	9、微信的“web开发者工具”

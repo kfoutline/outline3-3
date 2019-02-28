@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>文件上传</title>
+</head>
+<body>
+    <h1>文件上传</h1>
+    <div>
+        <input type="file" name="goods" id="goods">
+        <label><input type="checkbox" id="multiple">多文件</label>
+        <button id="btn">上传</button>
+    </div>
+    <script>
+    (()=>{
+        let goods = document.querySelector('#goods');
+        let multiple = document.querySelector('#multiple');
+        let btn = document.querySelector('#btn');
+
+        multiple.onchange = ()=>{
+            goods.multiple = multiple.checked;
+        }
+
+        btn.onclick = ()=>{
+            let data = new FormData();
+
+            let files = goods.files
+            
+            for(let i=0;i<files.length;i++){
+                data.append('goods',files[i]);
+            }
+
+            // 普通数据
+            data.set('username','laoxie');
+            data.append('password',123456);
+
+            console.log(files,data.getAll('goods'))
+
+            let xhr = new XMLHttpRequest();
+            xhr.open('post','/upload',true);
+            // xhr.setRequestHeader('content-type','application/x-www-form-urlencoded')
+            // xhr.send('myage=18&mytitle=xxx');
+
+            // xhr.setRequestHeader('content-type','application/json')
+            // xhr.send(JSON.stringify({name:'laoxie',age:18}));
+
+            xhr.send(data);
+            console.log(data);
+        }
+    })();
+    </script>
+</body>
+</html>
