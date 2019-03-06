@@ -32,11 +32,11 @@
 			02配置选项
 				* 关于DOM
 					* 渲染优先级：
-						* el > vm.$mount()
-						* render() > template > el.innerText
+						* render() > template > el.innerText > vm.$mount(selector)
 				* 关于数据
 					* data
 					* computed
+					* methods
 		 */
 		document.querySelector('.root').onclick = function(){
 			console.log(666)
@@ -51,12 +51,16 @@
 				},
 
 				// template:'<h1>{{name}}</h1>'
-				template:'#myDOM2',
+				// template:'#myDOM2',
+				
 				render:create=>{
-					let el = create('button','按钮');
+					let el = create('button',{attrs:{type:'submit',class:'title'}},'按钮');
 					console.log(el)
 					// el.innerText = ;
-					return el;
+					// return el;
+					return (
+						<button class="title" type="submit">按钮</button>
+					)
 				}
 			});
 

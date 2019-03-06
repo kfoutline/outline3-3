@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>MVC架构理解</title>
+</head>
+<body>
+    <h1>MVC架构理解</h1>
+    <!-- 1. View：发送指令到controller -->
+    <button onclick="controller.getData()">获取数据</button>
+    <div class="content"></div>
+
+    <script>
+
+        // 3. Model：处理数据，并返回Controller
+        let model = {
+            getData(callback){
+                let xhr = new XMLHttpRequest();
+                xhr.onload = ()=>{
+                    let res = JSON.parse(xhr.responseText);
+                    callback(res);
+                }
+                xhr.open('get','./data/football.json',true);
+                xhr.send();
+            }
+        }
+
+        // 2. Controller：
+        // * 监听View层指令，调用Model层操作并返回数据
+        // * 根据返回数据渲染View层
+        let controller = {
+            getData(){
+                model.getData((data)=>{
+                    this.render(data);
+                })
+            },
+            render(data){
+                let content = document.querySelector('.content');
+                content.innerHTML = data.map(item=>`<li>${item.name}：${item.content}</li>`).join('');
+            }
+        }
+    </script>
+</body>
+</html>

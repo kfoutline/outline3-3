@@ -2,9 +2,14 @@
 
 #VUE
 
-##模块系统
-###前言
-在很多 Vue 项目开发中，常规做法：1. 定义组件， 2. 使用组件（如下代码）
+## 模块系统
+
+### 前言
+
+在很多 Vue 项目开发中，常规做法：
+1. 定义组件 
+2. 使用组件（如下代码）
+
 ```javascript
     //定义全局组件
     Vue.component('my-component',{});
@@ -16,7 +21,7 @@
     });
 ```
 
->这种方式在很多中小规模的项目中运作的很好，但在复杂的项目中，就有以下缺点:
+> 这种方式在很多中小规模的项目中运作的很好，但在复杂的项目中，就有以下缺点:
 
 * 缺点
     * **全局定义 (Global definitions)** 强制要求每个 component 中的命名不得重复
@@ -24,17 +29,17 @@
     * **不支持 CSS (No CSS support)** 意味着当 HTML 和 JavaScript 组件化时，CSS 明显被遗漏
     * **没有构建步骤 (No build step)** 限制只能使用 HTML 和 ES5 JavaScript, 而不能使用预处理器，如 Pug (formerly Jade) 和 Babel
 
->所以Vue推出了**单文件组件**(扩展名为 .vue)，由于浏览器不支持.vue文件，所以要还要通过ES6的模块化(import,export)实现组件的模块花开发,由于浏览器不支持ES6模块化,必须接祖于babel和webpack工具来辅助实现，优点如下：
-
 * vue单文件优点
     - 完整语法高亮
     - CommonJS 模块
     - 组件作用域的 CSS
 
-###vue单文件组件开发流程
->webpack打包
+> Vue**单文件组件**(扩展名为 .vue)，由于浏览器不支持.vue文件，和ES6的模块化(import,export)开发,必须利用babel和webpack工具来辅助实现编译成浏览器支持的格式
 
-####定义目录
+### vue单文件组件开发流程
+> webpack打包
+
+#### 定义目录
 ![project](./img/project.png "Optional title")
 
 
@@ -128,17 +133,17 @@
 ```
 
 
-###ES6 Module
+### ES6 Module
 历史上，JavaScript一直没有模块体系（module），无法将一个大程序拆分成互相依赖的小文件，再用简单的方法拼装起来。其他语言都有这项功能，唯独javascript没有，在这之前我们都是借助第三方工具（request.js等）来实现模块化开发，直到ES6 module的出现，成为浏览器和服务器通用的模块解决方案，完全可以取代 CommonJS 和 AMD 规范
 
-####基本特点
+#### 基本特点
 * 每一个模块只加载一次， 并执行一次，再次加载同一文件，直接从内存中读取；
 * 每一个模块内声明的变量都是局部变量， 不会污染全局作用域；
 * 通过export导出模块，通过import导入模块
 * ES6模块只支持静态导入和导出，只可以在模块的最外层作用域使用import和export
 ，
 
-####export
+#### export
 >export命令用于规定模块的对外接口，只允许导出最外层函数、类以及var、let或const声明的变量，可多次export，export出去后自动成为**模块对象的属性**。
 * PS: export后只能跟function、class、var、let、const、default、{}
 
@@ -181,7 +186,7 @@
     export * from './md.js';
 ```
 
-####import
+#### import
 >import命令用于导入其他模块提供的功能
 
 * 基本用法

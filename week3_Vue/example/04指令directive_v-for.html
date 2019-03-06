@@ -13,8 +13,9 @@
 		<ul id="v-for-object" class="demo">
 		  <li v-for="(val,key,idx) of info">
 		    {{ val }}-{{ key }}-{{ idx }}
-		  </li>
+			</li>
 		</ul>
+		<p v-for="(num,idx) in arr" :key="num">{{num}}</p>
 	</div>
 	<script>
 		/*
@@ -29,9 +30,15 @@
 		      firstName: 'laoxie',
 		      lastName: 'xie',
 		      age: 30
-		    }
+				},
+				arr:[10,11,12,13]
 		  }
 		});
+
+		// key属性的影响
+		document.querySelectorAll('p').forEach((ele,idx)=>{
+			ele.flag = 'p-'+idx
+		})
 		
 	</script>
 </body>

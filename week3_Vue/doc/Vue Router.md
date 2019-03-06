@@ -1,13 +1,13 @@
 [TOC]
 
-#VUE
+# VUE
 
-##Vue-Router
+## Vue-Router
 Vue-Router允许我们通过不同的 URL 访问不同的内容。
 可以实现多视图的单页Web应用（SPA）
 
 
-###安装和引入
+### 安装和引入
 * script标签引入
 >在 Vue 后面加载 vue-router，它会自动实现安装
 
@@ -26,15 +26,15 @@ Vue-Router允许我们通过不同的 URL 访问不同的内容。
     // 调用Vue.use手动安装，之后才能在实例中通过this.$route访问
     Vue.use(VueRouter);
 ```
-###使用vue-router步骤
+### 使用vue-router步骤
 1. 引入vue-router
 2. 使用vue-router（script标签引入方式自动完成）
 3. 实例化router并配置参数
 4. 注入router实例到vue实例
 
-###使用
+### 使用
 
-####参数配置
+#### 参数配置
 * mode：路由模式
     - hash（默认）
     - history
@@ -47,12 +47,12 @@ Vue-Router允许我们通过不同的 URL 访问不同的内容。
     * component 指定路由组件（显示到`<router-view/>`中的组件）
         - 命名视图：在多视图组件中，给命名视图指定路由组件
         >默认指定default视图
-    * props（Boolean|Object|Function）：路由组件传参（[详情](#组件传参props)） 
+    * props（Boolean|Object|Function）：路由组件传参（[详情](# 组件传参props)） 
     * redirect：重定向
     * children：嵌套路由配置
     >子路由一般使用相对路径的path
 
-####声明式导航
+#### 声明式导航
 > 利用标签来实现路由跳转
 
 * `<router-link> `
@@ -73,7 +73,7 @@ Vue-Router允许我们通过不同的 URL 访问不同的内容。
 * `<router-view> `
     - name 命名视图（默认：default）
 
-####编程式导航
+#### 编程式导航
 >利用Router实例（this.$router）的方法实现路由跳转
 
 * $router.push(location)
@@ -89,9 +89,9 @@ Vue-Router允许我们通过不同的 URL 访问不同的内容。
 * $router.go(n)/$router.back()/$router.forward()
 > 在history 记录中向前或者后退多少步，类似 window.history.go(n)
 
-####路由传参
+#### 路由传参
 
-#####动态路由
+##### 动态路由
 >通过`this.$route`获取当前路由信息，路径改变自动把参数传入$route.params
 
 
@@ -133,7 +133,7 @@ Vue-Router允许我们通过不同的 URL 访问不同的内容。
     ```
 
 
-#####路由组件传参：props
+##### 路由组件传参：props
 >以上写法较为繁琐,而且组件与路由高度耦合，可以使用props组件传参的方式解耦
 
 * Boolean模式
@@ -194,7 +194,7 @@ Vue-Router允许我们通过不同的 URL 访问不同的内容。
     ]
 ```
 
-###导航守卫（路由钩子函数）
+### 导航守卫（路由钩子函数）
 >路由导航过程中分别执行的函数
 
 
@@ -213,7 +213,7 @@ Vue-Router允许我们通过不同的 URL 访问不同的内容。
 11. 触发 DOM 更新。
 12. 用创建好的实例调用 beforeRouteEnter 守卫中传给 next 的回调函数。
 
-####全局守卫
+#### 全局守卫
 >所有的路由切换都会执行，一般写在路由配置文件中
 
 * router.beforeEach(fn)
@@ -224,7 +224,7 @@ Vue-Router允许我们通过不同的 URL 访问不同的内容。
     - to
     - from
 
-####路由独享的守卫
+#### 路由独享的守卫
 >写在路由配置中
 
 * beforeEnter(fn)
@@ -232,7 +232,7 @@ Vue-Router允许我们通过不同的 URL 访问不同的内容。
     - from
     - next()
 
-####组件内的守卫
+#### 组件内的守卫
 * beforeRouteEnter(fn)
     - to
     - from
