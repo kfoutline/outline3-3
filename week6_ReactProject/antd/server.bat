@@ -1,0 +1,1 @@
+start cmd /k "cd /d F:\\mydoc\\kphone\\h5\\Section3\\Outline3\\week1_MongoDB\\src\\ && node server"

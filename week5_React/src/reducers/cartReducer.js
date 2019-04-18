@@ -21,7 +21,7 @@ let cartReducer = (state=initialState,action)=>{
                 ...state,
                 goodslist: [...state.goodslist, action.payload]
             }
-          case DELETE_FROM_CART: {
+          case 'DELETE_FROM_CART': {
             return {
               ...state,
               goodslist: state.goodslist.filter(item => item.name !== action.payload.name)

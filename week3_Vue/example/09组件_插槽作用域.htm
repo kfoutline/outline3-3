@@ -12,7 +12,9 @@
 		
 		<mynav>
 			<div slot-scope="props">
+				<h4>{{props}}</h4>
 				{{props.msg}}，{{props.username}}
+				<p slot="footer">my name is footer</p>
 			</div>
 		</mynav>
 	</div>
@@ -31,7 +33,8 @@
 					},
 					template:`
 						<div class="box">
-							<slot :msg="msg" :username="username">{{username}}，{{msg}}</slot>
+							<slot :msg="msg" :username="username"></slot>
+							<slot test="laoxie" name="footer"></slot>
 						</div>
 					
 					`

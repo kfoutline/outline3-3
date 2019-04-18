@@ -1,5 +1,8 @@
 const app = getApp();
 
+let fa = require('@fortawesome/fontawesome-free');
+console.log('fa:',fa);
+
 Page({
   data: {
     list_hot: [],

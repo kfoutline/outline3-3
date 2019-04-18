@@ -1,10 +1,8 @@
 [TOC]
 
-#VUE
+# 模块系统
 
-## 模块系统
-
-### 前言
+## 前言
 
 在很多 Vue 项目开发中，常规做法：
 1. 定义组件 
@@ -29,18 +27,20 @@
     * **不支持 CSS (No CSS support)** 意味着当 HTML 和 JavaScript 组件化时，CSS 明显被遗漏
     * **没有构建步骤 (No build step)** 限制只能使用 HTML 和 ES5 JavaScript, 而不能使用预处理器，如 Pug (formerly Jade) 和 Babel
 
+## vue单文件组件
+> Vue**单文件组件**(扩展名为 .vue)，由于浏览器不支持.vue文件，和ES6的模块化(import,export)开发,必须利用babel和webpack工具来辅助实现编译成浏览器支持的格式
+
 * vue单文件优点
     - 完整语法高亮
     - CommonJS 模块
     - 组件作用域的 CSS
 
-> Vue**单文件组件**(扩展名为 .vue)，由于浏览器不支持.vue文件，和ES6的模块化(import,export)开发,必须利用babel和webpack工具来辅助实现编译成浏览器支持的格式
 
 ### vue单文件组件开发流程
 > webpack打包
 
 #### 定义目录
-![project](./img/project.png "Optional title")
+![project](./img/project.png "项目目录")
 
 
 * 安装必要模块
@@ -50,10 +50,12 @@
         "vue": "^2.5.17",
         "vue-loader": "^15.4.2",
         "vue-template-compiler": "^2.5.17",
-        "webpack": "^4.18.0"
+        "webpack": "^4.18.0",
+        "webpack-cli": "^3.2.3"
       }
 ```
-* 设置webpack配置文件
+
+* 设置webpack配置文件（webpack.config.js）
 ```javascript
     const path = require('path');
     const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -133,18 +135,18 @@
 ```
 
 
-### ES6 Module
+## ES Module
 历史上，JavaScript一直没有模块体系（module），无法将一个大程序拆分成互相依赖的小文件，再用简单的方法拼装起来。其他语言都有这项功能，唯独javascript没有，在这之前我们都是借助第三方工具（request.js等）来实现模块化开发，直到ES6 module的出现，成为浏览器和服务器通用的模块解决方案，完全可以取代 CommonJS 和 AMD 规范
 
-#### 基本特点
+### 基本特点
 * 每一个模块只加载一次， 并执行一次，再次加载同一文件，直接从内存中读取；
 * 每一个模块内声明的变量都是局部变量， 不会污染全局作用域；
 * 通过export导出模块，通过import导入模块
 * ES6模块只支持静态导入和导出，只可以在模块的最外层作用域使用import和export
 ，
 
-#### export
->export命令用于规定模块的对外接口，只允许导出最外层函数、类以及var、let或const声明的变量，可多次export，export出去后自动成为**模块对象的属性**。
+### export
+> export命令用于规定模块的对外接口，只允许导出最外层函数、类以及var、let或const声明的变量，可多次export，export出去后自动成为**模块对象的属性**
 * PS: export后只能跟function、class、var、let、const、default、{}
 
 * 基本用法
@@ -172,7 +174,8 @@
 ```
 
 * default
-为模块指定默认输出，这样就可以在使用 import 令的时候，不必知道所要加载的变量名或函数名
+> 为模块指定默认输出，这样就可以在使用 import 令的时候，不必知道所要加载的变量名或函数名
+
 ```javascript
     export default {
         data:{
@@ -186,8 +189,21 @@
     export * from './md.js';
 ```
 
-#### import
->import命令用于导入其他模块提供的功能
+### import
+> import命令用于导入其他模块提供的功能，格式：`import <module> from <url>` 
+
+* url 支持格式
+```js
+    // 支持
+    import base from 'http://laoxie.com/js/base.js';
+    import base from '/js/base.js';
+    import base from './base.js';
+    import base from '../base.js';
+
+    // 不支持
+    import base from 'base.js';
+    import base from 'js/base.js';
+```
 
 * 基本用法
 ```javascript
@@ -210,5 +226,21 @@
 ```javascript
     //导入整个模块对象，并赋值给myModule变量
     import * as myModule from './base.js';
-
 ```
+
+### 在html中使用ES Module
+
+* 浏览器支持ES Module
+> 在`<script>`标签中指定`type="module"`
+
+```html
+    <script type="module">
+        import res from './base.js';
+        console.log(res)
+    </script>
+
+    <script type="module" src="js/base.js"></script>
+```
+
+* 浏览器不支持ES Module
+> 利用webpack等工具转换成ES5后引入（推荐）

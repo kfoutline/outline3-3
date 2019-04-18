@@ -1,7 +1,8 @@
 export default {
     namespace: 'goods',
     state: [{
-      name:'laoxie',id:1
+      name:'laoxie',
+      id:1
     },{
       name:'lemon',
       id:2

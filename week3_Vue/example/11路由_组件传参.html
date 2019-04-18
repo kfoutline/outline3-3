@@ -18,6 +18,9 @@
 		<div class="p-5 border">
 			<router-view></router-view>
 		</div>
+
+		v-bind字面量:
+		<home v-bind="{hello:true,me:'laoxie'}"/>
 	</div>
 	<script>
 		/*
@@ -121,6 +124,8 @@
 						console.log('完成',arguments)
 					})
 				}
+			},components:{
+				Home
 			}
 		})
 		

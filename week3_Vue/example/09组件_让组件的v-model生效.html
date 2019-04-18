@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>如何让组件上的v-model生效</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+</head>
+<body>
+	<h1>如何让组件上的v-model生效</h1>
+	<div id="app" class="container">
+		<div class="row">
+			<div class="col-md-6">
+     			<my-search v-model="search.keyword" :list="search.list" :btn-name="search.btnName"></my-search>
+			</div>
+			<div class="col-md-6">
+				<my-search v-model="query.keyword" :list="query.list" :btn-name="query.btnName"></my-search>
+			</div>
+		</div>
+   </div>
+
+	<template id="search">
+		<div class="search">
+			<div class="input-group">
+				<input type="search" class="form-control" :value="value" @input="$emit('input',$event.target.value)">
+				<div class="input-group-append">
+					<button class="btn btn-success">{{btnName}}</button>
+				</div>
+			</div>
+			<search-list :result="list" :value="value"></search-list>
+
+		</div>
+	</template>
+	
+	<script src="lib/vue.js"></script>
+	<script>
+		/*
+			如何让组件上的v-model生效
+				* v-model的原理（是以下代码的语法糖）
+					* v-bind:value="someData"
+					* v-on:input="someData=$event.target.value"
+			
+				* 要让让组件上的v-model生效，需做以下事情
+					* 组件内接受value： props:['value']
+					* 输入框绑定value属性，并触发input事件
+						* v-bind:value="value"
+						* v-on:input="$emit('input',$event.target.value)"
+		 */
+		
+		Vue.component('search-list',{
+			props:['result','value'],
+			template:`
+				<ul class="list-group">
+					<li class="list-group-item list-group-item-action" v-for="item in searchList">{{item}}</li>
+				</ul>
+			`,
+			computed:{
+				searchList(){
+					return this.result.filter(item=>(new RegExp(this.value,'i')).test(item))
+				}
+			}
+		});
+		
+    	
+    	let vm = new Vue({
+    		el:'#app',
+    		data:{
+    			search:{
+	    			keyword:'Vue',
+	    			btnName:'搜索',
+	    			list:['CSS','HTML','Javascript','Vue','Nodejs']
+    			},
+    			query:{
+    				keyword:'',
+	    			btnName:'查询',
+	    			list:['北京','上海','广州','深圳','杭州']
+    			}
+    		},
+    		components:{
+    			mySearch:{
+    				props:['value','list','btnName'],
+    				template:'#search'
+    				
+    			}
+    		}
+    	})
+		
+	</script>
+</body>
+</html>

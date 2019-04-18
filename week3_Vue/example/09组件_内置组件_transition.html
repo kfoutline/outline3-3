@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<title>10内置组件_1_transition</title>
+	<link rel="stylesheet" href="css/animate.css">
+	<style>
+		.container {
+			display: flex;
+		}
+
+		.container>div {
+			flex: 1
+		}
+
+		/* .v-enter-active,.v-leave-active{
+			transition: all 2s
+		}
+		.v-enter,.v-leave-to {
+			opacity: 0;
+		}
+
+		.v-enter-to,.v-leave {
+			opacity: 1
+		} */
+
+		.fade-enter-active {
+			transition: opacity 2s
+		}
+
+		.fade-enter {
+			opacity: 0;
+		}
+
+		.fade-enter-to {
+			opacity: 1
+		}
+
+		.fade-leave-active {
+			transition: opacity 2s
+		}
+
+		.fade-leave {
+			opacity: 1
+		}
+
+		.fade-leave-to {
+			opacity: 0;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>10内置组件_1_transition</h1>
+	<div id="app">
+		<div class="container">
+			<my-img src="img/mv1.jpg"></my-img>
+			<my-img src="img/mv3.jpg" name="fade"></my-img>
+			<my-img src="img/mv5.jpg" :classes="{enterActive:'bounceIn',leaveActive:'bounceOut'}"></my-img>
+			<my-img src="img/mv4.jpg" :css="false"></my-img>
+			<!-- <div>
+				<button @click="changeShow">显示隐藏</button>
+				<transition>
+					<div class="box" v-show="show"><img src="img/mv1.jpg" /></div>
+				</transition>
+			</div>
+			<div>
+				<button @click="changeShow">显示隐藏</button>
+				<transition name="fade">
+					<div class="box" v-show="show"><img src="img/mv3.jpg" /></div>
+				</transition>
+			</div>
+			<div>
+				<button @click="changeShow">显示隐藏</button>
+				<transition enter-class="" enter-active-class="bounceIn" enter-to-class="bounceInUp" leave-class=""
+					leave-active-class="bounceOut" leave-to-class="bounceOutUp">
+					<div class="box" v-show="show"><img src="img/mv3.jpg" /></div>
+				</transition>
+			</div> -->
+
+		</div>
+	</div>
+	<template id="myImg">
+		<div>
+			<button @click="show=!show">显示隐藏</button>
+			<transition
+			:enter-class="classes.enter" 
+			:enter-active-class="classes.enterActive" 
+			:enter-to-class="classes.enterTo" 
+			:leave-class="classes.leave"
+			:leave-active-class="classes.leaveActive" 
+			:leave-to-class="classes.leaveTo"
+			v-if="classes"
+			>
+				<div class="box" v-show="show"><img :src="src" /></div>
+			</transition>
+			<transition 
+			:name="name" 
+			:css="css"
+			v-on:before-enter="beforeEnter"
+			v-on:enter="enter"
+			v-on:after-enter="afterEnter"
+			v-on:enter-cancelled="enterCancelled"
+			v-on:before-leave="beforeLeave"
+			v-on:leave="leave"
+			v-on:after-leave="afterLeave"
+			v-on:leave-cancelled="leaveCancelled"
+			v-else>
+				<div class="box" v-show="show"><img :src="src" /></div>
+			</transition>
+		</div>
+	</template>
+	<script src="lib/vue.js"></script>
+	<script>
+		Vue.component('myImg', {
+			props:{
+				src:String,
+				name:String,
+				classes:Object,
+				css:{
+					type:Boolean,
+					default:true
+				}
+			},
+			data(){
+				return {
+					show:true
+				}
+			},
+			methods:{
+				beforeEnter(el){
+					console.log('beforeEnter',el)
+				},
+				enter(el,done){
+					console.log('enter',el,done)
+				},
+				afterEnter(a,b,c){
+					console.log('afterEnter',a,b,c)
+				},
+				enterCancelled(el){
+					console.log('enterCancelled',el)
+				},
+				beforeLeave(el){
+					console.log('beforeLeave')
+				},
+				leave(el,done){
+					console.log('leave',el,done)
+				},
+				afterLeave(a,b,c){
+					console.log('afterLeave',a,b,c)
+				},
+				leaveCancelled(el){
+					console.log('leaveCancelled')
+				}
+			},
+			template: `#myImg`,
+			directives:{
+				attrs:{
+					bind(el,binding){console.log(666,el,binding.value)
+						// 遍历传入属性
+						for(let key in binding.value){
+							let value = binding.value[key];
+							while(/(?<=.)([A-Z])/.test(key)){
+								key = key.replace(RegExp.$1,'-'+RegExp.$1.toLocaleLowerCase());
+							}
+							el.setAttribute(key+'-class',value);
+							
+						}
+					}
+				}
+			}
+		})
+		new Vue({
+			el: '#app',
+			data: {
+				show: true
+			},
+			methods: {
+				changeShow() {
+					this.show = !this.show;
+				}
+			}
+		})
+	</script>
+</body>
+
+</html>

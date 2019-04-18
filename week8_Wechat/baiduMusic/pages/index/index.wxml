@@ -8,6 +8,9 @@
     </swiper-item>
   </navigator>
 </swiper>
+<!-- 使用font-awesome -->
+<!-- <image src="../../assets/svgs/solid/ad.svg"/> -->
+<!-- <view class="fa fa-user"/> -->
 <!-- 搜索 -->
 <view class="weui-search-bar__form" bind:tap="gotoSearch">
   <view class="weui-search-bar__box">

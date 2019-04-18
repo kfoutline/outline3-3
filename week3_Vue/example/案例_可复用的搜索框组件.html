@@ -8,6 +8,7 @@
 </head>
 <body>
 	<h1>案例_可复用的搜索框组件</h1>
+	<h2>如何让组件上的v-model生效</h2>
 	<div id="app" class="container">
 		<div class="row">
 			<div class="col-md-6">
@@ -17,13 +18,12 @@
 				<my-search v-model="query.keyword" :list="query.list" :btn-name="query.btnName"></my-search>
 			</div>
 		</div>
-		<input type="text" v-model="search.keyword">
    </div>
 
 	<template id="search">
 		<div class="search">
 			<div class="input-group">
-				<input type="search" class="form-control" :value="value" @input="changeInput($event.target.value)">
+				<input type="search" class="form-control" :value="value" @input="$emit('input',$event.target.value)">
 				<div class="input-group-append">
 					<button class="btn btn-success">{{btnName}}</button>
 				</div>
@@ -37,21 +37,27 @@
 	<script>
 		/*
 			案例_可复用的搜索框组件
-				* v-model的原理
-					* v-bind:value
-					* v-on:input="change($event.target.value)"
+				* v-model的原理（是以下代码的语法糖）
+					* v-bind:value="someData"
+					* v-on:input="someData=$event.target.value"
+			
+				* 如何让组件上的v-model生效
+					* 组件内接受value： props:['value']
+					* 输入框绑定value属性，并触发input事件
+						* v-bind:value="value"
+						* v-on:input="$emit('input',$event.target.value)"
 		 */
 		
 		Vue.component('search-list',{
 			props:['result','value'],
 			template:`
 				<ul class="list-group">
-					<li class="list-group-item list-group-item-action" v-for="item in result" :class="{active:isActive(item)}">{{item}}</li>
+					<li class="list-group-item list-group-item-action" v-for="item in searchList">{{item}}</li>
 				</ul>
 			`,
-			methods:{
-				isActive(val){
-					return val.toLowerCase() == this.value.toLowerCase();
+			computed:{
+				searchList(){
+					return this.result.filter(item=>(new RegExp(this.value,'i')).test(item))
 				}
 			}
 		});
@@ -61,7 +67,7 @@
     		el:'#app',
     		data:{
     			search:{
-	    			keyword:'hello laoxie',
+	    			keyword:'Vue',
 	    			btnName:'搜索',
 	    			list:['CSS','HTML','Javascript','Vue','Nodejs']
     			},
@@ -74,12 +80,8 @@
     		components:{
     			mySearch:{
     				props:['value','list','btnName'],
-    				template:'#search',
-    				methods:{
-    					changeInput(val){
-    						this.$emit('input',val);
-    					}
-    				}
+    				template:'#search'
+    				
     			}
     		}
     	})

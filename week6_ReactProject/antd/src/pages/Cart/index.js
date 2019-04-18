@@ -17,8 +17,10 @@ import withLogin from '@/utils/withLogin';
 class CartContainer extends Component{
 
     componentDidMount(){
-        console.log(this.props)
+        console.log('props:',this.props)
         // this.props.subPrice();
+
+        this.props.dispatch({type:'INCREMENT'})
     }
 
     render(){
@@ -42,13 +44,20 @@ class CartContainer extends Component{
                 >
                     <List.Item.Meta
                         avatar={<img src={item.imgurl} style={{width:'100px',height:'100px'}}/>}
-                        title={<a onClick={()=>{history.push({pathname:'/goods',search:'?id='+item.id})}}>{item.name}</a>}
+                        title={<a onClick={(e)=>{
+                            e.persist();
+                            console.log(e.currentTarget);
+                            setTimeout(()=>{
+                                console.log(e.currentTarget)
+                            },500)
+                            // history.push({pathname:'/goods',search:'?id='+item.id})
+                        }}>{item.name}</a>}
                         description={
                             <div>
                             <p className="price"><span>{item.price}</span> &times; {item.qty}</p>
-                            <InputNumber min={1} max={5} defaultValue={item.qty} onChange={qty=>{console.log(666)
+                            <InputNumber min={1} max={5} defaultValue={item.qty} onChange={qty=>{
                                 // changeQty(item.id,qty)
-                                this.props.dispatch({type:'change_qty',payload:{id:item.id,qty}});
+                                this.props.dispatch({type:'CHANGE_QTY_ASYNC',payload:{id:item.id,qty}});
                             }} />
                             </div>
                         }
@@ -89,6 +98,7 @@ const mapStateToProps = state=>{
 //     }
 //   });
 
+// 映射cartAction中所有export default中的属性到props
 const mapDispatchToProps = dispatch=>bindActionCreators(cartAction,dispatch);
 
 CartContainer = connect(mapStateToProps,mapDispatchToProps)(CartContainer);

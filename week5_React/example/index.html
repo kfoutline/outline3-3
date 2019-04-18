@@ -10,10 +10,22 @@
 </head>
 <body>
     <div id="app"></div>
+    <div id="app2"></div>
     <script>
-        let element = React.createElement('div',{className:'box'},'123');
+        let element = React.createElement('div',{className:'box'},React.createElement('h2',{},'title'));
         ReactDOM.render(
             element,
+            document.querySelector('#app')
+        );
+
+        class Tex extends React.Component{
+            render(){
+                return React.createElement('h4',null,'1234')
+            }
+        }
+
+        ReactDOM.render(
+            React.createElement('h4',null,'1234'),
             document.querySelector('#app')
         )
     </script>

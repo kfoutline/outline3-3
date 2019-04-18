@@ -30,7 +30,7 @@
         // 查询数据库
         connection.query('select * from student', function (error, results, fields) {
             if (error) throw error;
-            console.log('The solution is: ', results[0].solution);
+            console.log('The solution is: ', results);
         });
         
         // 关闭连接,释放资源

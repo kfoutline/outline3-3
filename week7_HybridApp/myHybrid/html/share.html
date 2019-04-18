@@ -9,40 +9,73 @@
 	</head>
 	<body>
 		<div class="mui-content">
-			<ul class="shareList mui-row">
-				
-			</ul>
+			<button type="button" class="mui-btn mui-btn-primary mui-btn-outlined" id="btnShare">自定义分享</button>
+			<button type="button" class="mui-btn mui-btn-primary mui-btn-outlined" id="btnShareSystem">系统分享</button>
 		</div>
 		<script>
 			document.addEventListener("plusready", onPlusReady, false);
 
-			let serviceList = null;
+
 			function onPlusReady() {
-				let shareList = document.querySelector('.shareList');
-				plus.share.getServices((services) => {
-					console.log('services:', services);
-					serviceList = services;
-					shareList.innerHTML = services.map((item,idx) => {
-						return `<li class="mui-table-view-cell mui-col-xs-3">
-									<a class="mui-navigate-right" onclick="share(${idx})">${item.description}</a>
-								</li>`
-					}).join('')
-				});
+				let btnShare = document.querySelector('#btnShare')
+				let btnShareSystem = document.querySelector('#btnShareSystem');
+				
+				btnShareSystem.onclick = ()=>{
+					plus.share.sendWithSystem({content:'系统分享信息'}, ()=>{
+						console.log('分享成功')
+					});
+				}
+				
+				btnShare.onclick = ()=>{
+					//自定义分享列表
+					let actionbuttons;
+					let serviceList;
+					plus.share.getServices((services) => {
+					    console.log('services:', services);
+					    serviceList = services;
+					    actionbuttons = services.map((item, idx) => {
+					        return {
+					            title: item.description
+					        }
+					    })
+					
+					    //按钮
+					    plus.nativeUI.actionSheet({
+					        title: "文章分享",
+					        cancel: "取消",
+					        buttons: actionbuttons,
+					    },
+					        function (e) {
+					            console.log("User pressed: " + e.index);
+					            if (e.index > 0) {
+					                let currentService = serviceList[e.index - 1];
+					                console.log(currentService)
+					                if (currentService.authenticated) {
+					                    currentService.send({
+					                        content: 'hello my name is laoxie'
+					                    }, () => {
+					                        console.log('分享成功')
+					                    })
+					                } else {
+										currentService.authorize((service)=>{
+											console.log("成功：",service)
+											service.send({
+												content: 'hello my name is laoxie'
+											});
+										},()=>{
+											
+											plus.nativeUI.alert(currentService.description + '未认证', () => { }, '分享失败', '确定');
+										})
+					                }
+					
+					            }
+					        }
+					    );
+					});
+				}
+				
 			}
 			
-			function share(idx){
-				let currentService = serviceList[idx];
-				if(currentService.authenticated){
-					
-					currentService.send({content:'hello my name is laoxie'},()=>{
-						console.log('分享成功')
-					})
-				}else{
-					 plus.nativeUI.alert(currentService.description +'未认证', ()=>{
-						 
-					 }, '分享失败', '确定');
-				}
-			}
 		</script>
 	</body>
 </html>

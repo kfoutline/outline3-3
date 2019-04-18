@@ -13,39 +13,25 @@
 	<h4>当父组件传递值为基本类型时，在子组件中更改这个属性会报错。正确的做法是，在父组件中绑定属性值时，加上.sync修饰符？</h4>
 	<div id="app">
      <div>这是父组件的parentArray：{{parentArray}} - {{baseValue}}</div>
-     <my-component :child-array="parentArray" :mybase.async="baseValue"></my-component>
-     {{baseValue}}
+     <my-component :child-array="parentArray" :mybase.sync="baseValue"></my-component>
    </div>
 	<script>
 		/*
 			09组件_传递特定值
-				* 类型
-					* 全局组件
-						Vue.component(name,options)
-					* 局部组件
-						components:{name:options}
-				* 数据传递
-					* 父->子：
-						* 传递数据：props
-							* 在子组件上设置属性，并使用父组件的值
-							* 在子组件中利用props声明这些设置的属性，这样父组件就可以自动传值到子组件
-							PS：不建议直接修改父组件传入的值，而是作为子组件的初始值来使用
-						* 传递内容：<slot></slot>
-					* 子->父:
-						* 子组件上自定义事件，并使用父组件的事件处理函数
-							* 在子组件中使用v-on:事件名
-						* 子组件触发自定义事件：$emit()
-							* 会触发父组件的事件处理函数，从而实现数据传递
-				* 动态组件
-					<component is="name"></component>
+				* v-bind:propName.sync="val"
+				* 语法糖
+					v-bind:propName="val" v-on:update:propName="(v)=>{val=v}"
 		 */
      Vue.component('my-component', {
        template: `
-       <div>这是接收了父组件传递值的子组件的childArray: {{childArray}} <br>
-           <button type="button" @click="changeArray">
+			 <div>
+					父组件传入的引用类型childArray: {{childArray}} <br>
+					父组件传入的基本数据类型mybase：{{mybase}} <br>
+
+           <button @click="changeArray">
            点击我改变父元素的parentArray</button>
 
-           <button type="button" @click="changeBase">
+           <button @click="changeBase">
            改变父元素的baseValue</button>
          </div>`,
        props: ['childArray','mybase'],
@@ -56,13 +42,13 @@
        },
        methods: {
          changeArray () {
+					//  修改引用数据类型
            this.childArray.push(this.counter++);
-          
          },
          changeBase(){
-			console.log(this.mybase);
-         	// this.mybase++;
-         	this.$emit('update:mybase', 200)
+					//  修改基本数据类型
+						console.log(this.mybase);
+         		this.$emit('update:mybase', this.mybase+1)
          }
        }
      })

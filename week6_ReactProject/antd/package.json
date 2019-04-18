@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --progress",
-    "start": "npm run dev",
+    "start": "server.bat && npm run dev",
     "build": "webpack --progress"
   },
   "keywords": [],

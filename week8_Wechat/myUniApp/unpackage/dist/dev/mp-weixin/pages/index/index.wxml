@@ -1,0 +1,1 @@
+<view class="content" bind:__l="__l"><image class="logo" src="/static/logo.png"></image><view><text class="title">{{title}}</text><text text="{{title}}"></text><view class="_h1">{{title}}</view><label class="_span">{{"NickName:"+nickname}}</label></view><image src="/static/logo.png" class="_img"></image></view>

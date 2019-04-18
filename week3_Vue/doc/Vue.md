@@ -1,14 +1,17 @@
 [TOC]
 
 # VUE
+
 > 读音：[vjuː]，view
 
 ## 了解VUE
+
 这两年国内最火的前端框架当属Vue.js了，很多使用过vue的程序员这样评价它，“vue.js兼具angular.js和react.js的优点，并剔除了它们的缺点”。授予了这么高的评价的vue.js，也是开源世界华人的骄傲，因为它的作者是位中国人–尤雨溪（Evan You）。 
 
 Vue.js 是一个基于MVVM模式的一套渐进式框架。它是以数据驱动和组件化的思想构建的，采用自底向上增量开发的设计。相比于Angular.js，Vue.js提供了更加简洁、更易于理解的API，使得我们能够快速地上手并使用Vue.js
 
 ### 前端框架历史
+
 * jquery阶段（2006-2013）
     - 特点：节点操作简单易用，浏览器兼容
 * angular阶段（2009-2014）
@@ -19,6 +22,7 @@ Vue.js 是一个基于MVVM模式的一套渐进式框架。它是以数据驱动
     - 特点：综合angular与react的优点，MVVM模式，是一款高性能高效率的框架
 
 ### 架构模式
+
 复杂的软件必须有清晰合理的架构，更容易开发、维护和测试
 
 * MVC
@@ -59,16 +63,18 @@ Vue.js 是一个基于MVVM模式的一套渐进式框架。它是以数据驱动
 
     - 核心思想：关注Model的变化，让MVVM框架利用自己的机制去自动更新DOM，从而把开发者从操作DOM的繁琐中解脱出来！
 
-
 ## 安装和引入
+
 >* 开发环境：development
 * 生产环境：production
 
 * script标签
 * cdn
+
 ```html
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 ```
+
 * npm
 >能很好和webpack等打包工具配合使用
 * vue-cli脚手架
@@ -78,6 +84,7 @@ Vue.js 是一个基于MVVM模式的一套渐进式框架。它是以数据驱动
 ## 使用
 
 ## 实例化
+
 ```javascript
     var data = { name: 'laoxie' }
     var vm = new Vue({
@@ -86,7 +93,9 @@ Vue.js 是一个基于MVVM模式的一套渐进式框架。它是以数据驱动
     });
 
 ```
+
 ### 常用配置选项
+
 * 关于DOM节点
     * el（类型：Selector|Element)
         > Vue实例的挂载目标（实例中所有的属性/方法可直接在el中直接使用），挂载元素会被 Vue 生成的 DOM 替换
@@ -126,22 +135,25 @@ Vue.js 是一个基于MVVM模式的一套渐进式框架。它是以数据驱动
         ```
 
 ## 实例属性&方法
+
 > Vue实例化时，会遍历data/computed/methods中所有属性/方法，并写入Vue的实例
 
 ### 响应式属性
+
 > 遍历data中所有属性，通过Object.defineProperty()方法把它们设置为存储器属性（getter & setter），并写入Vue实例
 
 * 存储器属性（getter & setter）
 * **双向数据绑定原理**
-    * View -> Model
-    * Model -> View
+	* View -> Model
+	* Model -> View
 * 设置响应式属性
-    * 设置初始化数据
-    * Vue.set(target,key,val) 向**响应式系统**中的对象添加属性并自动渲染视图
-        > 注意：target对象不能是 Vue 实例，或者 Vue 实例的根数据对象
-    * 数组变异方法
+	* 设置初始化数据
+	* Vue.set(target,key,val) 向**响应式系统**中的对象添加属性并自动渲染视图
+			> 注意：target对象不能是 Vue 实例，或者 Vue 实例的根数据对象
+	* 数组变异方法
 
 ### 内置属性
+
 > 除了数据属性，Vue 实例还提供了一些有用的实例属性与方法。它们都有前缀 $，以便与用户定义的属性区分开来
 
 - $data: 同 data
@@ -166,7 +178,7 @@ Vue.js 是一个基于MVVM模式的一套渐进式框架。它是以数据驱动
     * $destroy()
         > 完全销毁一个实例。清理它与其它实例的连接，解绑它的全部指令及事件监听器。触发 beforeDestroy 和 destroyed 的钩子
     * $nextTick(callback)
-        > 同Vue.nextTick()，将回调延迟到下次 DOM 更新循环之后执行
+        > 同Vue.nextTick()，将回调延迟到下次 DOM 更新循环之后执行，返回promise对象
     * $forceUpdate() 强制刷新组件
 
 ```javascript
@@ -175,15 +187,16 @@ Vue.js 是一个基于MVVM模式的一套渐进式框架。它是以数据驱动
     });
 ```
 
-
 ## 生命周期
+
 <!-- ![Alt text](./img/lifecycle.png "Optional title") -->
 <img src="./img/lifecycle.png" style="width:500px;">
 
 ### 生命周期函数（钩子函数）
+
 >在某个时刻被自动执行的函数，this指向实例，以下为1.x与2.x钩子函数对照表：
 
-<img src="./img/lifecycle_hooks.png">
+<img src="./img/lifecycle_hooks.png"/>
 
 * beforeCreate()
     * 应用：可以在这加个loading事件 
@@ -202,11 +215,13 @@ Vue.js 是一个基于MVVM模式的一套渐进式框架。它是以数据驱动
     * 应用：清除定时器、延迟器、取消ajax请求等
 
 ## 指令directive
+
 指令是带有 v-* 前缀的特殊属性，格式：`v-指令名:参数.修饰符`
 
 ### 内置指令
 
 #### 数据绑定
+
 * 单向数据绑定
     * {{}}：插值表达式
         > 差值表达式中应当放置一些简单的运算（data中的数据、函数执行、三元运算等），对于任何复杂逻辑，你都应当使用计算属性操作完成后再写入插值表达式
@@ -277,13 +292,15 @@ Vue.js 是一个基于MVVM模式的一套渐进式框架。它是以数据驱动
         - trim
 
 #### 显示隐藏
+
 * v-show
 * v-if
     - v-else
     - v-else-if
 
 #### 事件绑定
->格式：v-on:事件类型.修饰符="事件处理函数"
+
+> 格式：v-on:事件类型.修饰符="事件处理函数"
 
 * v-on
 * 事件修饰符
@@ -307,6 +324,7 @@ Vue.js 是一个基于MVVM模式的一套渐进式框架。它是以数据驱动
 
 
 ### 自定义指令
+
 * 全局指令
     * 格式：Vue.directive(name,option)
     * 参数
@@ -327,7 +345,7 @@ Vue.js 是一个基于MVVM模式的一套渐进式框架。它是以数据驱动
         * binding   一个对象，包含以下案例中的属性
         * vnode
         * oldVnode
-        >仅在update 和 componentUpdated 钩子中可用
+            > 仅在update 和 componentUpdated 钩子中可用
 
 ```javascript
    // 使用指令：v-laoxie
@@ -340,15 +358,17 @@ Vue.js 是一个基于MVVM模式的一套渐进式框架。它是以数据驱动
           'value: '      + JSON.stringify(binding.value) + '<br>' + //指令值
           'expression: ' + JSON.stringify(binding.expression) + '<br>' + //字符串形式的指令表达式
           'arg: '        + JSON.stringify(binding.arg) + '<br>' + //指令参数，
-          'modifiers: '  + JSON.stringify(binding.modifiers) + '<br>' + //指令修饰符
+          'modifiers: '  + JSON.stringify(binding.modifiers) + '<br>' //指令修饰符
       }
     });
 ```
 
 
 ## 过滤器
+
 Vue允许你自定义过滤器，可被用于一些常见的文本格式化。
-过滤器可以用在两个地方：双花括号插值和 v-bind 
+过滤器可以用在两个地方：双花括号插值和 v-bind
+
 ```html
     <!-- 在双花括号中 -->
     {{ message | capitalize }}
@@ -358,10 +378,12 @@ Vue允许你自定义过滤器，可被用于一些常见的文本格式化。
 ```
 
 ### 全局过滤器
->格式：Vue.filter(name,definition)
+
+> 格式：Vue.filter(name,definition)
 
 ### 局部过滤器
->格式:filters属性
+
+> 格式:filters属性
 
 ```javascript
     // 首字母大写

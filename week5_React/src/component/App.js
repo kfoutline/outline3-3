@@ -21,9 +21,9 @@ import Icon from './Icon';
 
 
 class App extends Component{
-	// static contextTypes = {
-	// 	router:PropTypes.object
-	// }
+	static contextTypes = {
+		router:PropTypes.object
+	}
 	constructor(){
 		super();
 
@@ -70,6 +70,10 @@ class App extends Component{
 		this.props.history.push(tab.path);
 	}
 
+	handlerTest = ()=>{
+		console.log(2323)
+	}
+
 	componentDidMount(){
 		console.log(this);
 
@@ -86,7 +90,7 @@ class App extends Component{
 		},0)
 	}
 
-	render(){
+	render(){console.log('render...')
 		return <div className="myapp">
 			<div className="content">
 			<Switch>

@@ -39,4 +39,5 @@ export const changeQtyAsync = (id,qty)=>{console.log(123)
     }
 }
 
-export default {add,remove,changeQty,clear,subPrice,changeQtyAsync}
+
+export default {add,remove,changeQty,clear,subPrice}

@@ -57,6 +57,7 @@ class LoginForm extends Component {
 
         if (token) {
             // 发起ajax请求验证token
+            // week1_mongoDB服务器
             let res = await axios.get('http://localhost:4008/verifytoken', {
                 headers: {
                     token
